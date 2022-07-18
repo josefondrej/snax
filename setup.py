@@ -6,6 +6,7 @@ setup(
     author="Josef Ondrej",
     author_email="josef.ondrej@outlook.com",
     description="The truly lightweight feature store",
+    long_description="The truly lightweight feature store",
     packages=find_packages(),
     install_requires=[]
 )
