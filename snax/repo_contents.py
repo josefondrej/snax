@@ -44,11 +44,11 @@ class RepoContents:
 
 
 def py_path_to_module(path: Path) -> str:
-    return (
-        str(path.relative_to(os.getcwd()))[:-len(".py")]
-            .replace("./", "")
-            .replace("/", ".")
-    )
+    module_path = str(path.relative_to(os.getcwd()))[:-len(".py")] \
+        .replace("./", "") \
+        .replace("/", ".")
+
+    return module_path
 
 
 def parse_repo(repo_path: str) -> RepoContents:
