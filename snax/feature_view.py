@@ -25,6 +25,32 @@ class FeatureView:
         self._source = source
         self._tags = tags or dict()
 
+    def __repr__(self):
+        return f'FeatureView(name={self.name})'
+
+    def __eq__(self, other):
+        if not isinstance(other, FeatureView):
+            return False
+
+        if self.name != other.name:
+            return False
+
+        for entity in self.entities:
+            if entity not in other.entities:
+                return False
+
+        for feature in self.features:
+            if feature not in other.features:
+                return False
+
+        if self.source != other.source:
+            return False
+
+        return True
+
+    def __hash__(self):
+        return hash((self.name, self.entities, self.features, self.source))
+
     @property
     def name(self) -> str:
         return self._name
