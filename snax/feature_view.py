@@ -35,13 +35,23 @@ class FeatureView:
         if self.name != other.name:
             return False
 
-        for entity in self.entities:
-            if entity not in other.entities:
-                return False
+        if ((self.entities is None) and (other.entities is not None)) or \
+                ((self.entities is not None) and (other.entities is None)):
+            return False
 
-        for feature in self.features:
-            if feature not in other.features:
-                return False
+        if self.entities is not None:
+            for entity in self.entities:
+                if entity not in other.entities:
+                    return False
+
+        if ((self.features is None) and (other.features is not None)) or \
+                ((self.features is not None) and (other.features is None)):
+            return False
+
+        if self.features is not None:
+            for feature in self.features:
+                if feature not in other.features:
+                    return False
 
         if self.source != other.source:
             return False
