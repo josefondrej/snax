@@ -9,5 +9,8 @@ setup(
     long_description='The truly lightweight feature store',
     long_description_content_type='text/markdown',
     packages=find_packages(),
-    install_requires=[]
+    package_data={'snax': ['data/*.csv']},
+    install_requires=[
+        'pandas>=1.4.0'
+    ]
 )
