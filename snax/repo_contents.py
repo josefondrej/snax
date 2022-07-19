@@ -31,6 +31,11 @@ class RepoContents:
     def entities(self) -> List[Entity]:
         return self._entities
 
+    def get_data_source(self, name: str) -> DataSource:
+        for data_source in self.data_sources:
+            if data_source.name == name:
+                return data_source
+
     def get_feature_view(self, name: str) -> FeatureView:
         for feature_view in self.feature_views:
             if feature_view.name == name:
