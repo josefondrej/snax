@@ -5,7 +5,7 @@ import pandas as pd
 from snax.data_source import DataSource
 from snax.entity import Entity
 from snax.feature_view import FeatureView
-from snax.repo_contents import parse_repo
+from snax.repo_contents import parse_repo, RepoContents
 
 
 class FeatureStore:
@@ -15,7 +15,7 @@ class FeatureStore:
 
     def __init__(self, repo_path: str):
         self._repo_path = repo_path
-        self._repo_contents = parse_repo(repo_path)
+        self._repo_contents: RepoContents = parse_repo(repo_path)
 
     @property
     def repo_path(self) -> str:
