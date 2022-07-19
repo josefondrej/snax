@@ -18,7 +18,7 @@ data_source = CsvDataSource(
     tags={'owner': 'john.doe@gmail.com'}
 )
 
-FeatureView(
+winequality_acidity_feature_view = FeatureView(
     name='winequality_acidity_csv',
     entities=None,
     features=[

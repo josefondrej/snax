@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from snax.csv_data_source import CsvDataSource
+from snax.entity import Entity
 from snax.feature import Feature
 from snax.feature_view import FeatureView
 from snax.value_type import Int, String, Timestamp, Float
@@ -10,6 +11,11 @@ data_path = Path(__file__).parent.parent / 'data' / 'game.csv'
 data_source = CsvDataSource(
     name='nhl_games_csv',
     csv_file_path=data_path
+)
+
+match = Entity(
+    name='game',
+    join_keys=['game_id']
 )
 
 FeatureView(
