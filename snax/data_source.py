@@ -21,7 +21,7 @@ class DataSource(ABC):
         return f'DataSource(name={self.name})'
 
     def __eq__(self, other):
-        if not isinstance(other, DataSource):
+        if not isinstance(other, self.__class__):
             return False
 
         if (self.name != other.name):
