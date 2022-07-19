@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 import snax.example_feature_repos.winequality_feature_repo as winequality_feature_repo
@@ -9,7 +10,14 @@ from snax.value_type import Float
 
 
 def test_parse_repo():
-    wine_quality_repo_path = Path(winequality_feature_repo.__file__).parent
+    original_wine_quality_repo_path = Path(winequality_feature_repo.__file__).parent
+    wine_quality_repo_path = '/tmp/wine_quality_repo'
+
+    # Move to arbitrary location to test the case when the feature repo is at completely diferent path as the tests
+    # or pythonpath or workdir
+    shutil.rmtree(wine_quality_repo_path, ignore_errors=True)
+    shutil.copytree(src=original_wine_quality_repo_path, dst=wine_quality_repo_path)
+
     repo_contents = parse_repo(repo_path=wine_quality_repo_path)
 
     assert len(repo_contents.entities) == 1
