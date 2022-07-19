@@ -27,5 +27,5 @@ FeatureView(
         Feature('citric_acidity', Float),
         Feature('ph', Float)
     ],
-    data_source=data_source
+    source=data_source
 )
