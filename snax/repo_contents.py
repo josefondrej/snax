@@ -1,5 +1,4 @@
 import importlib
-import os
 from pathlib import Path
 from typing import List
 
@@ -43,24 +42,25 @@ class RepoContents:
                 return entity
 
 
-def py_path_to_module(path: Path) -> str:
-    module_path = str(path.relative_to(os.getcwd()))[:-len(".py")] \
-        .replace("./", "") \
-        .replace("/", ".")
-
-    return module_path
+def import_as_module(repo_file_path: str, repo_path: str):
+    module_relative_path = str(repo_file_path).replace(str(repo_path), '').replace('/', '.').replace('.py', '')
+    top_level_dir_name = repo_path.name
+    module_path = '_feature_store_repo.' + top_level_dir_name + module_relative_path
+    spec = importlib.util.spec_from_file_location(module_path, repo_file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def parse_repo(repo_path: str) -> RepoContents:
     repo_path = Path(repo_path)
-    repo_files = {path.resolve() for path in repo_path.glob('**/*.py')
-                  if path.is_file() and path.name != '__init__.py'}
+    repo_file_paths = {path.resolve() for path in repo_path.glob('**/*.py')
+                       if path.is_file() and path.name != '__init__.py'}
 
     repo_contents = RepoContents()
     data_sources_set = set()
-    for repo_file in repo_files:
-        module_path = py_path_to_module(repo_file)
-        module = importlib.import_module(module_path)
+    for repo_file_paths in repo_file_paths:
+        module = import_as_module(repo_file_paths, repo_path)
 
         for attr_name in dir(module):
             obj = getattr(module, attr_name)
