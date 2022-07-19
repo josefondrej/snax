@@ -53,6 +53,7 @@ def import_as_module(repo_file_path: str, repo_path: str):
 
 
 def parse_repo(repo_path: str) -> RepoContents:
+    # TODO: Implement also for git repos
     repo_path = Path(repo_path)
     repo_file_paths = {path.resolve() for path in repo_path.glob('**/*.py')
                        if path.is_file() and path.name != '__init__.py'}
