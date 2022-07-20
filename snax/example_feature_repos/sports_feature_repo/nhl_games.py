@@ -8,16 +8,19 @@ from snax.value_type import Int, String, Timestamp, Float
 
 data_path = Path(__file__).parent.parent / 'data' / 'game.csv'
 
+# Define DataSource Objects --------------------------------------------------------------------------------------------
 data_source = CsvDataSource(
     name='nhl_games_csv',
     csv_file_path=data_path
 )
 
+# Define Entity Objects ------------------------------------------------------------------------------------------------
 match = Entity(
     name='game',
     join_keys=['game_id']
 )
 
+# Define FeatureView Objects -------------------------------------------------------------------------------------------
 FeatureView(
     name='nhl_games_csv',
     entities=None,
