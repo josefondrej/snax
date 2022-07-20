@@ -1,8 +1,13 @@
 from abc import ABC
-from typing import Optional, Dict
+from typing import Optional, Dict, List
+
+import pandas as pd
+
+from snax.column_like import ColumnLike
 
 
 class DataSource(ABC):
+    # TODO: Finish implementation
     """
     A single table of data stored in some database
 
@@ -44,4 +49,30 @@ class DataSource(ABC):
     def tags(self) -> Dict:
         return self._tags
 
-    # TODO: Finish implementation
+    def select(self, what: List[ColumnLike], where_sql_query: Optional[str] = None) -> pd.DataFrame:
+        """
+        Select a subset of the underlying data
+        Args:
+            what: Entities, Features or feature names to select
+            where_sql_query: Optional filter query to apply to the selection, language depends on the data source # TODO: Unify the language so it does not depend on the data source
+
+        Returns:
+            A DataFrame containing the selected data
+        """
+        raise NotImplementedError('Has to be overridden by subclass')
+
+    def insert(self, key: List[ColumnLike], columns: List[ColumnLike], data: pd.DataFrame, if_exists: str = 'error'):
+        """
+        Insert feature values corresponding to the given keys into the data source
+
+        Args:
+            key: List of column names giving unique constraint on a row in the data source
+            columns: List of column names to use in the insert
+            data: Underlying data to insert
+            if_exists: What to do if the data source already contains non-empty data for the given keys
+                can be one of 'error', 'replace', 'ignore'
+
+        Returns:
+            None
+        """
+        raise NotImplementedError('Has to be overridden by subclass')
