@@ -1,4 +1,5 @@
 import shutil
+import tempfile
 from pathlib import Path
 
 import snax.example_feature_repos.winequality_feature_repo as winequality_feature_repo
@@ -11,7 +12,7 @@ from snax.value_type import Float
 
 def test_parse_repo():
     original_wine_quality_repo_path = Path(winequality_feature_repo.__file__).parent
-    wine_quality_repo_path = '/tmp/wine_quality_repo'
+    wine_quality_repo_path = Path(tempfile.gettempdir()) / 'wine_quality_repo'
 
     # Move to arbitrary location to test the case when the feature repo is at completely diferent path as the tests
     # or pythonpath or workdir
