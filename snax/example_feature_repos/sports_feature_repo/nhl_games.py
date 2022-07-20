@@ -41,5 +41,5 @@ FeatureView(
         Feature('venue_time_zone_offset', Float),
         Feature('venue_time_zone_tz', String),
     ],
-    data_source=data_source
+    source=data_source
 )
