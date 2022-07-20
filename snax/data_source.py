@@ -3,13 +3,16 @@ from typing import Optional, Dict, List
 
 import pandas as pd
 
-from snax.column_like import ColumnLike
+from snax.column_like import ColumnLike, get_colnames
 
 
 class DataSource(ABC):
     # TODO: Finish implementation
     """
-    A single table of data stored in some database
+    Representation of a single table of data stored in some database
+    It's main responsibility is to provide a data-frame (not necessarily with the correct column types) that represents
+    (subset) of the underlying data
+    It's secondary responsibility can be to provide a way how to modify the underlying data given a data-frame
 
     Args:
         name: Name of the data source
@@ -49,17 +52,18 @@ class DataSource(ABC):
     def tags(self) -> Dict:
         return self._tags
 
-    def select(self, what: List[ColumnLike], where_sql_query: Optional[str] = None) -> pd.DataFrame:
+    def select(self, columns: List[ColumnLike], where_sql_query: Optional[str] = None) -> pd.DataFrame:
         """
         Select a subset of the underlying data
         Args:
-            what: Entities, Features or feature names to select
-            where_sql_query: Optional filter query to apply to the selection, language depends on the data source # TODO: Unify the language so it does not depend on the data source
+            columns: Entities, Features or feature names to select
+            where_sql_query: Optional filter query to apply to the selection, for now language depends on the data source
 
         Returns:
             A DataFrame containing the selected data
         """
-        raise NotImplementedError('Has to be overridden by subclass')
+        string_columns = self._column_likes_to_colnames(columns)
+        return self._select(string_columns, where_sql_query)
 
     def insert(self, key: List[ColumnLike], columns: List[ColumnLike], data: pd.DataFrame, if_exists: str = 'error'):
         """
@@ -75,4 +79,23 @@ class DataSource(ABC):
         Returns:
             None
         """
+        string_key = self._column_likes_to_colnames(key)
+        string_columns = self._column_likes_to_colnames(columns)
+        self._insert(string_key, string_columns, data, if_exists)
+
+    def _select(self, columns: List[str], where_sql_query: Optional[str] = None) -> pd.DataFrame:
         raise NotImplementedError('Has to be overridden by subclass')
+
+    def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
+        raise NotImplementedError('Has to be overridden by subclass')
+
+    @property
+    def _inverse_field_mapping(self) -> Dict:
+        if not hasattr(self, '_inverse_field_mapping_') or self._inverse_field_mapping_ is None:
+            self._inverse_field_mapping_ = {value: key for key, value in self.field_mapping.items()}
+        return self._inverse_field_mapping_
+
+    def _column_likes_to_colnames(self, column_likes: List[ColumnLike]):
+        feature_names = sum([get_colnames(column_like) for column_like in column_likes], [])
+        column_names = list(map(lambda name: self._inverse_field_mapping.get(name, name), feature_names))
+        return column_names
