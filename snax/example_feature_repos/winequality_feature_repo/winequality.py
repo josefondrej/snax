@@ -5,7 +5,7 @@ from snax.feature import Feature
 from snax.feature_view import FeatureView
 from snax.value_type import Float
 
-data_path = Path(__file__).parent.parent / 'data' / 'winequality.csv'
+data_path = Path(__file__).parent.parent.parent / 'data' / 'winequality.csv'
 
 # Define DataSource Objects --------------------------------------------------------------------------------------------
 data_source = CsvDataSource(

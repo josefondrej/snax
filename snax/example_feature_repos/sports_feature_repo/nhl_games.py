@@ -6,7 +6,7 @@ from snax.feature import Feature
 from snax.feature_view import FeatureView
 from snax.value_type import Int, String, Timestamp, Float
 
-data_path = Path(__file__).parent.parent / 'data' / 'game.csv'
+data_path = Path(__file__).parent.parent.parent / 'data' / 'game.csv'
 
 # Define DataSource Objects --------------------------------------------------------------------------------------------
 data_source = CsvDataSource(
