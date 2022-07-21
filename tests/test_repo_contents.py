@@ -1,5 +1,3 @@
-import shutil
-import tempfile
 from pathlib import Path
 
 import snax.example_feature_repos.winequality_feature_repo as winequality_feature_repo
@@ -7,17 +5,14 @@ from snax.csv_data_source import CsvDataSource
 from snax.feature import Feature
 from snax.feature_view import FeatureView
 from snax.repo_contents import parse_repo, DUMMY_ENTITY
+from snax.utils import copy_to_temp
 from snax.value_type import Float
 
 
 def test_parse_repo():
+    # Copy to arbitrary location to simulate real-world use-case
     original_wine_quality_repo_path = Path(winequality_feature_repo.__file__).parent
-    wine_quality_repo_path = Path(tempfile.gettempdir()) / 'wine_quality_repo'
-
-    # Move to arbitrary location to test the case when the feature repo is at completely diferent path as the tests
-    # or pythonpath or workdir
-    shutil.rmtree(wine_quality_repo_path, ignore_errors=True)
-    shutil.copytree(src=original_wine_quality_repo_path, dst=wine_quality_repo_path)
+    wine_quality_repo_path = copy_to_temp(original_wine_quality_repo_path)
 
     repo_contents = parse_repo(repo_path=wine_quality_repo_path)
 
