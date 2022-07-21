@@ -14,6 +14,10 @@ def test_copy_file():
 
 
 def test_copy_empty_dir():
+    gitkeep_file_path = empty_dummy_directory_path / '.gitkeep'
+    if os.path.exists(gitkeep_file_path):
+        os.remove(gitkeep_file_path)
+
     temp_path = copy_to_temp(empty_dummy_directory_path)
     assert os.path.exists(temp_path)
 
