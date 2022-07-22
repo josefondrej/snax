@@ -96,6 +96,9 @@ class DataSource(ABC):
         return self._inverse_field_mapping_
 
     def _column_likes_to_colnames(self, column_likes: List[ColumnLike]):
+        if column_likes is None:
+            return None
+
         feature_names = sum([get_colnames(column_like) for column_like in column_likes], [])
         column_names = list(map(lambda name: self._inverse_field_mapping.get(name, name), feature_names))
         return column_names
