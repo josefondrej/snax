@@ -9,7 +9,7 @@ from snax.value_type import Int, String, Timestamp, Float
 data_path = Path(__file__).parent.parent.parent / 'data' / 'game.csv'
 
 # Define DataSource Objects --------------------------------------------------------------------------------------------
-nhl_games_data_source = CsvDataSource(
+nhl_games_csv_data_source = CsvDataSource(
     name='nhl_games_csv',
     csv_file_path=data_path
 )
@@ -21,7 +21,7 @@ match_entity = Entity(
 )
 
 # Define FeatureView Objects -------------------------------------------------------------------------------------------
-nhl_games_feature_view = FeatureView(
+nhl_games_csv_feature_view = FeatureView(
     name='nhl_games_csv',
     entities=[match_entity],
     features=[
@@ -41,5 +41,5 @@ nhl_games_feature_view = FeatureView(
         Feature('venue_time_zone_offset', Float),
         Feature('venue_time_zone_tz', String),
     ],
-    source=nhl_games_data_source
+    source=nhl_games_csv_data_source
 )

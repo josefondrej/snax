@@ -8,7 +8,7 @@ from snax.value_type import Float
 data_path = Path(__file__).parent.parent.parent / 'data' / 'winequality.csv'
 
 # Define DataSource Objects --------------------------------------------------------------------------------------------
-winequality_data_source = CsvDataSource(
+winequality_csv_data_source = CsvDataSource(
     name='winequality_csv',
     csv_file_path=data_path,
     separator=',',
@@ -22,7 +22,7 @@ winequality_data_source = CsvDataSource(
 )
 
 # Define FeatureView Objects -------------------------------------------------------------------------------------------
-winequality_acidity_feature_view = FeatureView(
+winequality_csv_acidity_feature_view = FeatureView(
     name='winequality_acidity_csv',
     entities=None,
     features=[
@@ -31,5 +31,5 @@ winequality_acidity_feature_view = FeatureView(
         Feature('citric_acidity', Float),
         Feature('ph', Float)
     ],
-    source=winequality_data_source
+    source=winequality_csv_data_source
 )
