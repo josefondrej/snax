@@ -52,11 +52,11 @@ class DataSource(ABC):
     def tags(self) -> Dict:
         return self._tags
 
-    def select(self, columns: List[ColumnLike], where_sql_query: Optional[str] = None) -> pd.DataFrame:
+    def select(self, columns: Optional[List[ColumnLike]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
         """
         Select a subset of the underlying data
         Args:
-            columns: Entities, Features or feature names to select
+            columns: Entities, Features or feature names to select, if None, all columns are selected
             where_sql_query: Optional filter query to apply to the selection, for now language depends on the data source
 
         Returns:
@@ -83,7 +83,7 @@ class DataSource(ABC):
         string_columns = self._column_likes_to_colnames(columns)
         self._insert(string_key, string_columns, data, if_exists)
 
-    def _select(self, columns: List[str], where_sql_query: Optional[str] = None) -> pd.DataFrame:
+    def _select(self, columns: Optional[List[str]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
         raise NotImplementedError('Has to be overridden by subclass')
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
