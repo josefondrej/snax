@@ -1,8 +1,6 @@
-from datetime import datetime
-
 import pandas as pd
 import pytest
-from pandas._testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 
 from snax.csv_data_source import CsvDataSource
 from snax.entity import Entity
@@ -129,9 +127,11 @@ def test_insert_partial_new_column(users_with_nas_data_source):
             'first_name_uppercase': first_names_uppercase
         })
     )
-    data = users_with_nas_data_source.select(['first_name_uppercase'])
-    assert (~data['first_name_uppercase'].isna()).sum() == len(first_names_uppercase)
-    assert set(first_names_uppercase) == set(list(data['first_name_uppercase']))
+    data = users_with_nas_data_source.select(['id', 'first_name_uppercase'])
+    assert (~data['first_name_uppercase'].isna()).sum() == 2
+    data_updated = data[data['id'].isin([3, 5, 10])]
+    data_updated.sort_values(by='id', inplace=True)
+    assert first_names_uppercase == list(data_updated['first_name_uppercase'])
 
 
 def test_insert_full_new_row(users_with_nas_data_source):
@@ -140,9 +140,9 @@ def test_insert_full_new_row(users_with_nas_data_source):
         'first_name': ['CIRILLO', 'CODI'],
         'last_name': ['SEABORN', 'PANDAS'],
         'gender': ['Male', 'Female'],
-        'timestamp': ['2022-08-17T10:41:25', datetime(2022, 8, 16, 15, 45, 31)],
+        'timestamp': ['2022-08-17T10:41:25', '2022-08-16T15:45:31'],
         'age': [None, 56],
-        'is_subscribed': [False, True],
+        'is_subscribed': ['False', 'True'],
         'children': [2, None],
     })
     users_with_nas_data_source.insert(
@@ -153,7 +153,7 @@ def test_insert_full_new_row(users_with_nas_data_source):
     )
     data = users_with_nas_data_source.select()
     retrieved_new_data = data[data['id'].isin([0, 11])]
-    assert_frame_equal(new_data, retrieved_new_data)
+    assert_frame_equal(new_data.reset_index(drop=True), retrieved_new_data.reset_index(drop=True))
 
 
 def test_insert_partial_new_row(users_with_nas_data_source):
@@ -169,7 +169,7 @@ def test_insert_partial_new_row(users_with_nas_data_source):
     )
     retrieved_data = users_with_nas_data_source.select([Entity('user', join_keys=['id']), Feature('gender', String)])
     retrieved_new_data = retrieved_data[retrieved_data['id'].isin([0, 11])]
-    assert_frame_equal(data, retrieved_new_data[['id', 'gender']])
+    assert_frame_equal(data.reset_index(drop=True), retrieved_new_data[['id', 'gender']].reset_index(drop=True))
 
 
 def test_insert_existing_data_replace(users_with_nas_data_source):
@@ -186,7 +186,7 @@ def test_insert_existing_data_replace(users_with_nas_data_source):
     retrieved_data = users_with_nas_data_source.select(['id', 'first_name'])
     retrieved_data.sort_values(by='id', inplace=True)
     updated_retrieved_data = retrieved_data[retrieved_data['id'].isin([4, 5, 6])]
-    assert_frame_equal(data, updated_retrieved_data)
+    assert_frame_equal(data.reset_index(drop=True), updated_retrieved_data.reset_index(drop=True))
 
 
 def test_insert_existing_data_error(users_with_nas_data_source):
@@ -197,8 +197,8 @@ def test_insert_existing_data_error(users_with_nas_data_source):
 
 def test_insert_existing_data_ignore(users_with_nas_data_source):
     data = pd.DataFrame({'id': [4], 'first_name': [None]})
-    users_with_nas_data_source.insert(key=['id'], columns=['first_name'], data=data, if_exists='error')
+    users_with_nas_data_source.insert(key=['id'], columns=['first_name'], data=data, if_exists='ignore')
     retrieved_data = users_with_nas_data_source.select(['id', 'first_name'])
 
     updated_retrieved_data = retrieved_data[retrieved_data['id'] == 4]
-    assert str(updated_retrieved_data['first_name'][0]) == 'Germaine'
+    assert str(updated_retrieved_data['first_name'].iloc[0]) == 'Germaine'
