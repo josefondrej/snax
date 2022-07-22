@@ -3,8 +3,9 @@
 - [x] Make example datasets smaller
 - [ ] Unify the query language in `DataSource` so it does not depend on the type of the `DataSource`
 - [x] Implement `utils/copy_to_temp.py`
-- [ ] Use `utils/copy_to_temp.py` in `test_repo_contents.py`, `test_csv_data_source.py`, `test_feature_store.py`
-- [ ] Complete `test_csv_data_source.py` (& its related tasks)
+- [x] Use `utils/copy_to_temp.py` in `test_repo_contents.py`, `test_csv_data_source.py`, `test_feature_store.py`
+- [x] Complete `test_csv_data_source.py` (& its related tasks)
 - [ ] Complete `test_feature_store.py` (& its related tasks)
-- [ ] Add dataset that has missings in string, float, int, datetime columns
-- [ ] Add tests to `test_csv_data_source.py` on missing values
+- [x] Add dataset that has missings in string, float, int, datetime columns
+- [x] Add tests to `test_csv_data_source.py` on missing values
+- [x] Implement in-memory data source (& perhaps derive csv data source & others from it)
