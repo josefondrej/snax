@@ -5,6 +5,8 @@ import pandas as pd
 
 from snax.column_like import ColumnLike, get_colnames
 
+_VALID_IF_EXISTS_OPTIONS = ['error', 'ignore', 'replace']
+
 
 class DataSource(ABC):
     # TODO: Finish implementation
@@ -79,6 +81,9 @@ class DataSource(ABC):
         Returns:
             None
         """
+        if if_exists not in _VALID_IF_EXISTS_OPTIONS:
+            raise ValueError(f'if_exists must be one of {_VALID_IF_EXISTS_OPTIONS}')
+
         string_key = self._column_likes_to_colnames(key)
         string_columns = self._column_likes_to_colnames(columns)
         self._insert(string_key, string_columns, data, if_exists)
