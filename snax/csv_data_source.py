@@ -34,12 +34,15 @@ class CsvDataSource(DataSource):
             data.rename(columns=self.field_mapping, inplace=True)
         return data
 
-    def _select(self, columns: List[str], where_sql_query: Optional[str] = None) -> pd.DataFrame:
+    def _select(self, columns: Optional[List[str]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
         data_subset = self.data.copy()
         if where_sql_query is not None:
             data_subset = data_subset.query(where_sql_query)
 
-        return data_subset.loc[:, columns]
+        if columns is not None:
+            return data_subset.loc[:, columns]
+        else:
+            return data_subset
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
         raise NotImplementedError('TODO: Implement')
