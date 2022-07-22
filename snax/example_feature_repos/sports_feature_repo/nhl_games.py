@@ -23,7 +23,7 @@ match = Entity(
 # Define FeatureView Objects -------------------------------------------------------------------------------------------
 FeatureView(
     name='nhl_games_csv',
-    entities=None,
+    entities=[match],
     features=[
         Feature('game_id', Int),
         Feature('season', String),
