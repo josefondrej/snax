@@ -74,7 +74,8 @@ class DataSourceBase(ABC):
         Args:
             key: List of column names giving unique constraint on a row in the data source
             columns: List of column names to use in the insert
-            data: Underlying data to insert
+            data: Data to insert, the column names must correspond to feature names (not to the
+                data sources' underlying field names)
             if_exists: What to do if the data source already contains non-empty data for the given keys
                 can be one of 'error', 'replace', 'ignore'
 
@@ -86,7 +87,7 @@ class DataSourceBase(ABC):
 
         string_key = self._column_likes_to_colnames(key)
         string_columns = self._column_likes_to_colnames(columns)
-        self._insert(string_key, string_columns, data, if_exists)
+        self._insert(string_key, string_columns, data.rename(columns=self._inverse_field_mapping), if_exists)
 
     def _select(self, columns: Optional[List[str]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
         raise NotImplementedError('Has to be overridden by subclass')
