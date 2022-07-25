@@ -14,3 +14,4 @@
 - [ ] Refactor csv data source so it uses in-memory data source under the hood
 - [ ] Refactor generally usable tests from csv data source to `test_data_source.py` [new] and run them agains all
   data sources as parametrized tests
+- [ ] Add data source test with non-empty `field_mapping`
