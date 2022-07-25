@@ -24,7 +24,7 @@ class CsvDataSource(InMemoryDataSource):
         data = pd.read_csv(self.csv_file_path, sep=self.separator)
         if self.field_mapping is not None:
             data.rename(columns=self.field_mapping, inplace=True)
-        self._data
+        self._data = data
 
     def _dump_data(self):
         self._data.to_csv(self.csv_file_path, sep=self.separator, index=False)
@@ -33,7 +33,7 @@ class CsvDataSource(InMemoryDataSource):
         if self._data is None:
             self._load_data()
 
-        super()._select(columns=columns, where_sql_query=where_sql_query)
+        return super()._select(columns=columns, where_sql_query=where_sql_query)
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
         if self._data is None:
