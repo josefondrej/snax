@@ -2,17 +2,15 @@ from typing import Optional, Dict, List
 
 import pandas as pd
 
-from snax.data_sources.data_source import DataSourceBase
+from snax.data_sources.in_memory_data_source import InMemoryDataSource
 
 
-class CsvDataSource(DataSourceBase):
-    # TODO: Finish implementation
+class CsvDataSource(InMemoryDataSource):
     def __init__(self, name: str, csv_file_path: str, separator: str = ',',
                  field_mapping: Optional[Dict[str, str]] = None, tags: Optional[Dict] = None):
-        super().__init__(name, field_mapping, tags)
+        super().__init__(name=name, data=None, field_mapping=field_mapping, tags=tags)
         self._csv_file_path = csv_file_path
         self._separator = separator
-        self._data = None
 
     @property
     def csv_file_path(self) -> str:
@@ -35,45 +33,12 @@ class CsvDataSource(DataSourceBase):
         if self._data is None:
             self._load_data()
 
-        data_subset = self._data.copy()
-        if where_sql_query is not None:
-            data_subset = data_subset.query(where_sql_query)
-
-        if columns is not None:
-            return data_subset.loc[:, columns]
-        else:
-            return data_subset
+        super()._select(columns=columns, where_sql_query=where_sql_query)
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
         if self._data is None:
             self._load_data()
 
-        data_to_insert = data[key + columns].copy()
-
-        data_index = pd.MultiIndex.from_frame(self._data[key])
-        insert_index = pd.MultiIndex.from_frame(data_to_insert[key])
-
-        data_indices_of_inserted_rows = data_index.get_indexer_for(insert_index)
-
-        if if_exists == 'error':
-            existing_data_colnames = list(self._data.columns)
-            inserted_data_have_some_original_colnames = any(colname in existing_data_colnames for colname in columns)
-            inserted_data_have_some_original_keys = any(data_indices_of_inserted_rows != -1)
-            if inserted_data_have_some_original_colnames and inserted_data_have_some_original_keys:
-                raise ValueError('Some of the inserted data already exists in the data source')
-
-        new_columns = [colname for colname in data_to_insert.columns if colname not in self._data.columns]
-        for original_index_of_inserted_row, (_, inserted_row) \
-                in zip(data_indices_of_inserted_rows, data_to_insert.iterrows()):
-            # TODO: Optimize speed by splitting on indices with -1 and not -1
-            if original_index_of_inserted_row == -1:
-                self._data = self._data.append(inserted_row)
-            else:
-                if if_exists == 'replace' or if_exists == 'error':
-                    self._data.loc[original_index_of_inserted_row, columns] = inserted_row
-                elif if_exists == 'ignore':
-                    self._data.loc[original_index_of_inserted_row, new_columns] = new_columns
-                else:
-                    raise ValueError(f'Unknown if_exists value: {if_exists}')
+        super()._insert(key=key, columns=columns, data=data, if_exists=if_exists)
 
         self._dump_data()
