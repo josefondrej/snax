@@ -9,7 +9,7 @@ class InMemoryDataSource(DataSourceBase):
     def __init__(self, name: str, data: Optional[pd.DataFrame] = None, field_mapping: Optional[Dict[str, str]] = None,
                  tags: Optional[Dict] = None):
         super().__init__(name=name, field_mapping=field_mapping, tags=tags)
-        self._data = data or None
+        self._data = data
 
     def _select(self, columns: Optional[List[str]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
         data_subset = self._data.copy()
