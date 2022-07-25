@@ -2,7 +2,7 @@ from typing import List
 
 import pandas as pd
 
-from snax.data_source import DataSource
+from snax.data_sources.data_source import DataSourceBase
 from snax.entity import Entity
 from snax.feature_view import FeatureView
 from snax.repo_contents import parse_repo, RepoContents
@@ -43,8 +43,8 @@ class FeatureStore:
     def get_entity(self, name: str) -> Entity:
         return self._repo_contents.get_entity(name)
 
-    def list_data_sources(self) -> List[DataSource]:
+    def list_data_sources(self) -> List[DataSourceBase]:
         return self._repo_contents.data_sources
 
-    def get_data_source(self, name: str) -> DataSource:
+    def get_data_source(self, name: str) -> DataSourceBase:
         return self._repo_contents.get_data_source(name)

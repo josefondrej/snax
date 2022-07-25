@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from snax.csv_data_source import CsvDataSource
+from snax.data_sources.csv_data_source import CsvDataSource
 from snax.entity import Entity
 from snax.feature import Feature
 from snax.feature_view import FeatureView

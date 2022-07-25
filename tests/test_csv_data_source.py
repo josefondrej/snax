@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from snax.csv_data_source import CsvDataSource
+from snax.data_sources.csv_data_source import CsvDataSource
 from snax.entity import Entity
 from snax.example_feature_repos.sports_feature_repo.nhl_games import data_path as original_nhl_data_path
 from snax.example_feature_repos.users_with_nas_feature_repo.users_with_nas import \

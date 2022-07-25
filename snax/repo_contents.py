@@ -2,7 +2,7 @@ import importlib
 from pathlib import Path
 from typing import List
 
-from snax.data_source import DataSource
+from snax.data_sources.data_source import DataSourceBase
 from snax.entity import Entity
 from snax.feature_view import FeatureView
 from snax.value_type import ValueType
@@ -13,14 +13,14 @@ DUMMY_ENTITY = Entity(DUMMY_ENTITY_NAME, [DUMMY_ENTITY_ID], ValueType.STRING)
 
 
 class RepoContents:
-    def __init__(self, data_sources: List[DataSource] = None, feature_views: List[FeatureView] = None,
+    def __init__(self, data_sources: List[DataSourceBase] = None, feature_views: List[FeatureView] = None,
                  entities: List[Entity] = None):
         self._data_sources = data_sources or []
         self._feature_views = feature_views or []
         self._entities = entities or []
 
     @property
-    def data_sources(self) -> List[DataSource]:
+    def data_sources(self) -> List[DataSourceBase]:
         return self._data_sources
 
     @property
@@ -31,7 +31,7 @@ class RepoContents:
     def entities(self) -> List[Entity]:
         return self._entities
 
-    def get_data_source(self, name: str) -> DataSource:
+    def get_data_source(self, name: str) -> DataSourceBase:
         for data_source in self.data_sources:
             if data_source.name == name:
                 return data_source
@@ -70,7 +70,7 @@ def parse_repo(repo_path: str) -> RepoContents:
 
         for attr_name in dir(module):
             obj = getattr(module, attr_name)
-            if isinstance(obj, DataSource) and not any((obj is ds) for ds in repo_contents.data_sources):
+            if isinstance(obj, DataSourceBase) and not any((obj is ds) for ds in repo_contents.data_sources):
                 repo_contents.data_sources.append(obj)
                 data_sources_set.add(obj)
             if isinstance(obj, FeatureView) and not any((obj is fv) for fv in repo_contents.feature_views):

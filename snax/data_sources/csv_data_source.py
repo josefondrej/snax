@@ -2,10 +2,10 @@ from typing import Optional, Dict, List
 
 import pandas as pd
 
-from snax.data_source import DataSource
+from snax.data_sources.data_source import DataSourceBase
 
 
-class CsvDataSource(DataSource):
+class CsvDataSource(DataSourceBase):
     # TODO: Finish implementation
     def __init__(self, name: str, csv_file_path: str, separator: str = ',',
                  field_mapping: Optional[Dict[str, str]] = None, tags: Optional[Dict] = None):

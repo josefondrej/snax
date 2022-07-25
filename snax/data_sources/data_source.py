@@ -8,7 +8,7 @@ from snax.column_like import ColumnLike, get_colnames
 _VALID_IF_EXISTS_OPTIONS = ['error', 'ignore', 'replace']
 
 
-class DataSource(ABC):
+class DataSourceBase(ABC):
     # TODO: Finish implementation
     """
     Representation of a single table of data stored in some database

@@ -1,6 +1,6 @@
 from typing import List, Optional, Dict
 
-from snax.data_source import DataSource
+from snax.data_sources.data_source import DataSourceBase
 from snax.entity import Entity
 from snax.feature import Feature
 
@@ -18,7 +18,7 @@ class FeatureView:
     """
 
     def __init__(self, name: str, entities: Optional[List[Entity]], features: Optional[List[Feature]],
-                 source: DataSource, tags: Optional[Dict[str, str]] = None):
+                 source: DataSourceBase, tags: Optional[Dict[str, str]] = None):
         self._name = name
         self._entities = entities
         self._features = features
@@ -74,7 +74,7 @@ class FeatureView:
         return self._features
 
     @property
-    def source(self) -> DataSource:
+    def source(self) -> DataSourceBase:
         return self._source
 
     @property

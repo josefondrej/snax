@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import snax.example_feature_repos.winequality_feature_repo as winequality_feature_repo
-from snax.csv_data_source import CsvDataSource
+from snax.data_sources.csv_data_source import CsvDataSource
 from snax.feature import Feature
 from snax.feature_view import FeatureView
 from snax.repo_contents import parse_repo, DUMMY_ENTITY
