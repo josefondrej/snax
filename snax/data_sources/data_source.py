@@ -9,7 +9,6 @@ _VALID_IF_EXISTS_OPTIONS = ['error', 'ignore', 'replace']
 
 
 class DataSourceBase(ABC):
-    # TODO: Finish implementation
     """
     Representation of a single table of data stored in some database
     It's main responsibility is to provide a data-frame (not necessarily with the correct column types) that represents
