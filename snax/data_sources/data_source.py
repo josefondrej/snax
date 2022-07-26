@@ -64,7 +64,9 @@ class DataSourceBase(ABC):
             A DataFrame containing the selected data
         """
         string_columns = self._column_likes_to_colnames(columns)
-        return self._select(string_columns, where_sql_query)
+        selected_data = self._select(string_columns, where_sql_query)
+        selected_data.rename(columns=self._field_mapping, inplace=True)
+        return selected_data
 
     def insert(self, key: List[ColumnLike], columns: List[ColumnLike], data: pd.DataFrame, if_exists: str = 'error'):
         """
