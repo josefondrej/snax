@@ -2,63 +2,35 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from snax.data_sources.csv_data_source import CsvDataSource
-from snax.data_sources.in_memory_data_source import InMemoryDataSource
+from snax.data_sources.examples import csv, in_memory
 from snax.entity import Entity
-from snax.example_feature_repos.sports_feature_repo.nhl_games import data_path as original_nhl_data_path
-from snax.example_feature_repos.users_with_nas_feature_repo.users_with_nas import \
-    data_path as original_users_with_na_data_path
 from snax.feature import Feature
-from snax.utils import copy_to_temp
 from snax.value_type import Int, String, Bool, Timestamp
 
+_data_source_backend_to_examples_module = {
+    'csv': csv,
+    'in-memory': in_memory
+}
 
-@pytest.fixture(params=['csv', 'in-memory'])
+_data_source_backends = ['csv', 'in-memory']
+
+
+@pytest.fixture(params=_data_source_backends)
 def nhl_data_source(request):
-    if request.param == 'csv':
-        return CsvDataSource(
-            name='nhl_games_csv',
-            csv_file_path=copy_to_temp(original_nhl_data_path)
-        )
-    elif request.param == 'in-memory':
-        return InMemoryDataSource(
-            name='nhl_games_in_memory',
-            data=pd.read_csv(original_nhl_data_path)
-        )
+    module = _data_source_backend_to_examples_module[request.param]
+    return module.create_nhl_games()
 
 
-@pytest.fixture(params=['csv', 'in-memory'])
+@pytest.fixture(params=_data_source_backends)
 def users_with_nas_data_source(request):
-    if request.param == 'csv':
-        return CsvDataSource(
-            name='users_with_nas_csv',
-            csv_file_path=copy_to_temp(original_users_with_na_data_path)
-        )
-    elif request.param == 'in-memory':
-        return InMemoryDataSource(
-            name='users_with_nas_in_memory',
-            data=pd.read_csv(original_users_with_na_data_path)
-        )
+    module = _data_source_backend_to_examples_module[request.param]
+    return module.create_users_with_nas()
 
 
-@pytest.fixture(params=['csv', 'in-memory'])
+@pytest.fixture(params=_data_source_backends)
 def users_with_nas_field_mapping_data_source(request):
-    field_mapping = {
-        'is_subscribed': 'issubscribed',
-        'timestamp': 'time_stamp',
-    }
-    if request.param == 'csv':
-        return CsvDataSource(
-            name='users_with_nas_csv',
-            csv_file_path=copy_to_temp(original_users_with_na_data_path),
-            field_mapping=field_mapping
-        )
-    elif request.param == 'in-memory':
-        return InMemoryDataSource(
-            name='users_with_nas_in_memory',
-            data=pd.read_csv(original_users_with_na_data_path),
-            field_mapping=field_mapping
-        )
+    module = _data_source_backend_to_examples_module[request.param]
+    return module.create_users_with_nas_field_mapping()
 
 
 def test_select_single_column_by_string(nhl_data_source):
