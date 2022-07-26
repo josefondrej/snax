@@ -2,7 +2,7 @@ import importlib
 from pathlib import Path
 from typing import List
 
-from snax.data_sources.data_source import DataSourceBase
+from snax.data_sources.data_source_base import DataSourceBase
 from snax.entity import Entity
 from snax.feature_view import FeatureView
 from snax.value_type import ValueType

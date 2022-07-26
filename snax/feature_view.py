@@ -1,6 +1,6 @@
 from typing import List, Optional, Dict
 
-from snax.data_sources.data_source import DataSourceBase
+from snax.data_sources.data_source_base import DataSourceBase
 from snax.entity import Entity
 from snax.feature import Feature
 

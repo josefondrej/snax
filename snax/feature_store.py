@@ -2,7 +2,7 @@ from typing import List
 
 import pandas as pd
 
-from snax.data_sources.data_source import DataSourceBase
+from snax.data_sources.data_source_base import DataSourceBase
 from snax.entity import Entity
 from snax.feature_view import FeatureView
 from snax.repo_contents import parse_repo, RepoContents
