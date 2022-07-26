@@ -22,8 +22,6 @@ class CsvDataSource(InMemoryDataSource):
 
     def _load_data(self) -> pd.DataFrame:
         data = pd.read_csv(self.csv_file_path, sep=self.separator)
-        if self.field_mapping is not None:
-            data.rename(columns=self.field_mapping, inplace=True)
         self._data = data
 
     def _dump_data(self):
