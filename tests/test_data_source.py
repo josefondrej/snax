@@ -10,7 +10,7 @@ from snax.example_feature_repos.users_with_nas_feature_repo.users_with_nas impor
     data_path as original_users_with_na_data_path
 from snax.feature import Feature
 from snax.utils import copy_to_temp
-from snax.value_type import Int, String
+from snax.value_type import Int, String, Bool
 
 
 @pytest.fixture(params=['csv', 'in-memory'])
@@ -38,6 +38,26 @@ def users_with_nas_data_source(request):
         return InMemoryDataSource(
             name='users_with_nas_in_memory',
             data=pd.read_csv(original_users_with_na_data_path)
+        )
+
+
+@pytest.fixture(params=['csv', 'in-memory'])
+def users_with_nas_field_mapping_data_source(request):
+    field_mapping = {
+        'is_subscribed': 'issubscribed',
+        'timestamp': 'time_stamp',
+    }
+    if request.param == 'csv':
+        return CsvDataSource(
+            name='users_with_nas_csv',
+            csv_file_path=copy_to_temp(original_users_with_na_data_path),
+            field_mapping=field_mapping
+        )
+    elif request.param == 'in-memory':
+        return InMemoryDataSource(
+            name='users_with_nas_in_memory',
+            data=pd.read_csv(original_users_with_na_data_path),
+            field_mapping=field_mapping
         )
 
 
@@ -207,3 +227,8 @@ def test_insert_existing_data_ignore(users_with_nas_data_source):
 
     updated_retrieved_data = retrieved_data[retrieved_data['id'] == 4]
     assert str(updated_retrieved_data['first_name'].iloc[0]) == 'Germaine'
+
+
+def test_select_from_datasource_with_field_mapping(users_with_nas_field_mapping_data_source):
+    data = users_with_nas_field_mapping_data_source.select(['time_stamp', Feature('issubscribed', Bool)])
+    assert list(data.columns) == ['time_stamp', 'issubscribed']
