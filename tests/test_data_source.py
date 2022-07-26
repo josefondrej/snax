@@ -1,36 +1,52 @@
+from typing import Union
+
 import pandas as pd
 import pytest
+from _pytest.outcomes import Skipped
 from pandas.testing import assert_frame_equal
 
-from snax.data_sources.examples import csv, in_memory
+from snax.data_sources.data_source_base import DataSourceBase
+from snax.data_sources.examples import csv, in_memory, oracle
 from snax.entity import Entity
 from snax.feature import Feature
 from snax.value_type import Int, String, Bool, Timestamp
 
 _data_source_backend_to_examples_module = {
     'csv': csv,
-    'in-memory': in_memory
+    'in-memory': in_memory,
+    'oracle': oracle
 }
 
-_data_source_backends = ['csv', 'in-memory']
+_data_source_backends = ['csv', 'in-memory', 'oracle']
+
+
+def _handle_unavailable_datasource(data_source_backend: str, data_source: DataSourceBase) -> Union[
+    Skipped, DataSourceBase]:
+    if data_source_backend == 'oracle':
+        return pytest.skip('Oracle backend is not available')
+    else:
+        return data_source
 
 
 @pytest.fixture(params=_data_source_backends)
 def nhl_data_source(request):
     module = _data_source_backend_to_examples_module[request.param]
-    return module.create_nhl_games()
+    data_source = module.create_nhl_games()
+    return _handle_unavailable_datasource(request.param, data_source)
 
 
 @pytest.fixture(params=_data_source_backends)
 def users_with_nas_data_source(request):
     module = _data_source_backend_to_examples_module[request.param]
-    return module.create_users_with_nas()
+    data_source = module.create_users_with_nas()
+    return _handle_unavailable_datasource(request.param, data_source)
 
 
 @pytest.fixture(params=_data_source_backends)
 def users_with_nas_field_mapping_data_source(request):
     module = _data_source_backend_to_examples_module[request.param]
-    return module.create_users_with_nas_field_mapping()
+    data_source = module.create_users_with_nas_field_mapping()
+    return _handle_unavailable_datasource(request.param, data_source)
 
 
 def test_select_single_column_by_string(nhl_data_source):
