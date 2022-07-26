@@ -10,7 +10,7 @@ from snax.example_feature_repos.users_with_nas_feature_repo.users_with_nas impor
     data_path as original_users_with_na_data_path
 from snax.feature import Feature
 from snax.utils import copy_to_temp
-from snax.value_type import Int, String, Bool
+from snax.value_type import Int, String, Bool, Timestamp
 
 
 @pytest.fixture(params=['csv', 'in-memory'])
@@ -232,3 +232,22 @@ def test_insert_existing_data_ignore(users_with_nas_data_source):
 def test_select_from_datasource_with_field_mapping(users_with_nas_field_mapping_data_source):
     data = users_with_nas_field_mapping_data_source.select(['time_stamp', Feature('issubscribed', Bool)])
     assert list(data.columns) == ['time_stamp', 'issubscribed']
+
+
+def test_insert_to_datasource_with_field_mapping(users_with_nas_field_mapping_data_source):
+    data = pd.DataFrame({
+        'id': [10, 11],
+        'time_stamp': ['2030-08-17T10:41:25', '2030-08-16T15:45:31'],
+        'issubscribed': [True, True]
+    })
+    users_with_nas_field_mapping_data_source.insert(
+        key=[Entity('user', join_keys=['id'])],
+        columns=[Feature('time_stamp', Timestamp), Feature('issubscribed', Bool)],
+        data=data,
+        if_exists='replace'
+    )
+    retrieved_data = users_with_nas_field_mapping_data_source.select(
+        ['id', 'time_stamp', Feature('issubscribed', Bool)])
+    retrieved_data = retrieved_data[retrieved_data['id'].isin([10, 11])]
+    retrieved_data.sort_values(by='id', inplace=True)
+    assert_frame_equal(data.reset_index(drop=True), retrieved_data.reset_index(drop=True), check_dtype=False)
