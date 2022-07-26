@@ -10,6 +10,7 @@
 - [x] Add tests to `test_csv_data_source.py` on missing values
 - [x] Implement in-memory data source (& perhaps derive csv data source & others from it)
 - [x] Remove csv data sources `.data` property
-- [ ] Refactor generally usable tests from csv data source to `test_data_source.py` [new] and run them agains all
+- [x] Refactor generally usable tests from csv data source to `test_data_source.py` [new] and run them agains all
   data sources as parametrized tests
-- [ ] Add data source test with non-empty `field_mapping`
+- [x] Add data source test with non-empty `field_mapping` & test it
+- [ ] Add Oracle data source
