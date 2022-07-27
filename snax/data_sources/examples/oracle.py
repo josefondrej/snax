@@ -36,6 +36,7 @@ def create_nhl_games() -> CsvDataSource:
         name='nhl_games_in_memory',
         schema=_ORACLE_SCHEMA,
         table=_ORACLE_NHL_TABLE,
+        engine=engine
     )
 
 
@@ -49,6 +50,7 @@ def create_users_with_nas() -> CsvDataSource:
         name='users_with_nas_in_memory',
         schema=_ORACLE_SCHEMA,
         table=_ORACLE_USERS_WITH_NAS_TABLE,
+        engine=engine
     )
 
 
@@ -62,6 +64,7 @@ def create_users_with_nas_field_mapping() -> CsvDataSource:
         name='users_with_nas_in_memory',
         schema=_ORACLE_SCHEMA,
         table=_ORACLE_USERS_WITH_NAS_TABLE,
+        engine=engine,
         field_mapping={
             'is_subscribed': 'issubscribed',
             'timestamp': 'time_stamp',
