@@ -22,7 +22,7 @@ _data_source_backends = ['csv', 'in-memory', 'oracle']
 
 def _handle_unavailable_datasource(data_source_backend: str, data_source: DataSourceBase) -> Union[
     Skipped, DataSourceBase]:
-    if data_source_backend == 'oracle':
+    if data_source_backend == 'oracle' and data_source is None:
         return pytest.skip('Oracle backend is not available')
     else:
         return data_source
