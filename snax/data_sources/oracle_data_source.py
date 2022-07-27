@@ -31,7 +31,13 @@ class OracleDataSource(DataSourceBase):
         self._ensure_table_exists()
 
     def _select(self, columns: Optional[List[str]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
-        raise NotImplementedError('TODO: Implement')
+        joined_columns = ','.join(columns) if columns else '*'
+        query = f'SELECT {joined_columns} FROM {self._schema}.{self._table}'
+        if where_sql_query:
+            query += f' WHERE {where_sql_query}'
+
+        data = pd.read_sql(query, self._engine)
+        return data
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
         raise NotImplementedError('TODO: Implement')
