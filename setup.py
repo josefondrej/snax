@@ -11,6 +11,7 @@ setup(
     packages=find_packages(),
     package_data={'snax': ['data/*.csv']},
     install_requires=[
-        'pandas>=1.4.0'
+        'pandas>=1.4.0',
+        'sqlalchemy>=1.4.0'
     ]
 )
