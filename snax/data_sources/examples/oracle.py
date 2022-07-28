@@ -30,7 +30,7 @@ def none_if_oracle_not_set(func):
 @none_if_oracle_not_set
 def create_nhl_games() -> CsvDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
-    _NHL_DATA.to_sql(con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_NHL_TABLE, if_exists='replace')
+    _NHL_DATA.to_sql(con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_NHL_TABLE, if_exists='replace', index=False)
 
     return OracleDataSource(
         name='nhl_games_in_memory',
@@ -44,7 +44,7 @@ def create_nhl_games() -> CsvDataSource:
 def create_users_with_nas() -> CsvDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
     _USERS_WITH_NA_DATA.to_sql(
-        con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_USERS_WITH_NAS_TABLE, if_exists='replace')
+        con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_USERS_WITH_NAS_TABLE, if_exists='replace', index=False)
 
     return OracleDataSource(
         name='users_with_nas_in_memory',
@@ -58,7 +58,7 @@ def create_users_with_nas() -> CsvDataSource:
 def create_users_with_nas_field_mapping() -> CsvDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
     _USERS_WITH_NA_DATA.to_sql(
-        con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_USERS_WITH_NAS_TABLE, if_exists='replace')
+        con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_USERS_WITH_NAS_TABLE, if_exists='replace', index=False)
 
     return OracleDataSource(
         name='users_with_nas_in_memory',
