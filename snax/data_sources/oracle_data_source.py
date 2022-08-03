@@ -2,8 +2,11 @@ import logging
 from typing import Optional, Dict, List
 
 import pandas as pd
+from pandas import MultiIndex
 from sqlalchemy.engine import Engine
 
+from snax.data_sources._oracle_utils import drop_table, get_column_types, retype_dataframe, \
+    add_columns, upsert, get_data_subset_in_db, add_unique_constraint
 from snax.data_sources.data_source_base import DataSourceBase
 
 logger = logging.getLogger(__name__)
@@ -40,19 +43,26 @@ class OracleDataSource(DataSourceBase):
         return data
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
-        raise NotImplementedError('TODO: Implement')
+        add_unique_constraint(key, self._table, self._schema, self._engine)
+        colname_to_type = get_column_types(self._schema, self._engine, self._table)
+        data = retype_dataframe(colname_to_type, data)
 
-    def _ensure_table_exists(self):
-        """Checks if schema.table exists in the Oracle DB and creates it if it doesn't"""
-        query = f'SELECT * FROM {self._schema}.{self._table}'
-        try:
-            pd.read_sql(query, self._engine, chunksize=1)
-            logger.info(f'Table {self._schema}.{self._table} exists')
-        except Exception:
-            query = f'CREATE TABLE {self._schema}.{self._table} (dummy int)'
-            self._engine.execute(query)
-            logger.info(f'Table {self._schema}.{self._table} created')
+        existing_key_values = MultiIndex.from_frame(
+            get_data_subset_in_db(data, key, self._table, self._schema, self._engine))
+        inserted_key_values = MultiIndex.from_frame(data[key])
+
+        inserted_in_existing = [item in existing_key_values for item in inserted_key_values]
+        new_columns = [colname for colname in list(data.columns) if colname not in self._colnames]
+
+        if if_exists == 'error':
+            if any(inserted_in_existing) and len(new_columns) > 0:
+                raise ValueError(f'Data already exists in {self._schema}.{self._table}')
+
+        add_columns(new_columns, data, self._table, self._schema, self._engine)
+        upsert(key, new_columns, data, self._table, self._schema, self._engine)
+        upsert(key, columns, data[~inserted_in_existing], self._table, self._schema, self._engine)
+        if if_exists == 'overwrite':
+            upsert(key, columns, data[inserted_in_existing], self._table, self._schema, self._engine)
 
     def delete(self):
-        query = f'DROP TABLE {self._schema}.{self._table}'
-        self._engine.execute(query)
+        drop_table(self._table, self._schema, self._engine)
