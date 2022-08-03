@@ -3,7 +3,6 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 
-from snax.data_sources.csv_data_source import CsvDataSource
 from snax.data_sources.oracle_data_source import OracleDataSource
 from snax.example_feature_repos.sports_feature_repo.nhl_games import data_path as original_nhl_data_path
 from snax.example_feature_repos.users_with_nas_feature_repo.users_with_nas import \
@@ -28,7 +27,7 @@ def none_if_oracle_not_set(func):
 
 
 @none_if_oracle_not_set
-def create_nhl_games() -> CsvDataSource:
+def create_nhl_games() -> OracleDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
     _NHL_DATA.to_sql(con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_NHL_TABLE, if_exists='replace', index=False)
 
@@ -41,7 +40,7 @@ def create_nhl_games() -> CsvDataSource:
 
 
 @none_if_oracle_not_set
-def create_users_with_nas() -> CsvDataSource:
+def create_users_with_nas() -> OracleDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
     _USERS_WITH_NA_DATA.to_sql(
         con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_USERS_WITH_NAS_TABLE, if_exists='replace', index=False)
@@ -55,7 +54,7 @@ def create_users_with_nas() -> CsvDataSource:
 
 
 @none_if_oracle_not_set
-def create_users_with_nas_field_mapping() -> CsvDataSource:
+def create_users_with_nas_field_mapping() -> OracleDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
     _USERS_WITH_NA_DATA.to_sql(
         con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_USERS_WITH_NAS_TABLE, if_exists='replace', index=False)
