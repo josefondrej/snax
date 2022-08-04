@@ -50,6 +50,13 @@ def users_with_nas_field_mapping_data_source(request):
     return _handle_unavailable_datasource(request.param, data_source)
 
 
+@pytest.fixture(params=_data_source_backends)
+def empty_data_source(request):
+    module = _data_source_backend_to_examples_module[request.param]
+    data_source = module.create_empty_data_source()
+    return _handle_unavailable_datasource(request.param, data_source)
+
+
 def test_select_single_column_by_string(nhl_data_source):
     data = nhl_data_source.select(['game_id'])
     first_few_sorted_game_ids = sorted(list(data['game_id']))[:5]
@@ -281,3 +288,19 @@ def test_insert_to_datasource_with_field_mapping(users_with_nas_field_mapping_da
     retrieved_data = retrieved_data[retrieved_data['id'].isin([10, 11])]
     retrieved_data.sort_values(by='id', inplace=True)
     assert_frame_equal(data.reset_index(drop=True), retrieved_data.reset_index(drop=True), check_dtype=False)
+
+
+def test_insert_into_empty_datasource(empty_data_source):
+    data = pd.DataFrame({
+        'id': [1, 2, 3],
+        'first_name': ['John', 'Jane', 'Mary'],
+        'last_name': ['Doe', 'Doe', 'Doe']
+    })
+    empty_data_source.insert(
+        key=['id'],
+        columns=['first_name', 'last_name'],
+        data=data,
+        if_exists='replace'
+    )
+    retrieved_data = empty_data_source.select(['id', 'first_name', 'last_name'])
+    assert frames_equal_up_to_row_ordering(data, retrieved_data)
