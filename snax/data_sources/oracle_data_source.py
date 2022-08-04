@@ -57,12 +57,13 @@ class OracleDataSource(DataSourceBase):
         new_columns = [colname for colname in list(data.columns) if colname not in existing_columns]
 
         if if_exists == 'error':
-            if any(inserted_in_existing) and len(new_columns) > 0:
+            common_existing_and_inserted_columns = (set(data.columns) - set(key)).intersection(existing_columns)
+            if any(inserted_in_existing) and len(common_existing_and_inserted_columns) > 0:
                 raise ValueError(f'Data already exists in {self._schema}.{self._table}')
 
         add_columns(new_columns, data, self._table, self._schema, self._engine)
         upsert(key, new_columns, data, self._table, self._schema, self._engine)
-        upsert(key, columns, data[~inserted_in_existing], self._table, self._schema, self._engine)
+        upsert(key, columns, data[[not item for item in inserted_in_existing]], self._table, self._schema, self._engine)
         if if_exists == 'overwrite':
             upsert(key, columns, data[inserted_in_existing], self._table, self._schema, self._engine)
 
