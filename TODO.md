@@ -17,3 +17,4 @@
 - [ ] Add few data source specific tests to test that at least some `where_sql_query` parameter values work
 - [ ] Test for inserting new data into empty data source
 - [ ] Test inserting with multi-keys
+- [ ] Handle reserved column names in oracle data source
