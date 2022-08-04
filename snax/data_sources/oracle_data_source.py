@@ -6,7 +6,7 @@ from pandas import MultiIndex
 from sqlalchemy.engine import Engine
 
 from snax.data_sources._oracle_utils import drop_table, get_base_column_types, retype_dataframe, \
-    add_columns, upsert, get_data_subset_in_db, add_unique_constraint
+    add_columns, upsert, get_data_subset_in_db, add_unique_constraint, ensure_table_exists
 from snax.data_sources.data_source_base import DataSourceBase
 
 logger = logging.getLogger(__name__)
@@ -24,6 +24,7 @@ class OracleDataSource(DataSourceBase):
             field_mapping: A mapping from field names in this data source to feature names
             tags: Tags for the data source
     """
+
     def __init__(self, name: str, schema: str, table: str, engine: Engine,
                  field_mapping: Optional[Dict[str, str]] = None, tags: Optional[Dict] = None):
         super().__init__(name=name, field_mapping=field_mapping, tags=tags)
@@ -31,7 +32,7 @@ class OracleDataSource(DataSourceBase):
         self._schema = schema
         self._table = table
 
-        self._ensure_table_exists()
+        ensure_table_exists(self._table, self._schema, self._engine)
 
     def _select(self, columns: Optional[List[str]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
         joined_columns = ','.join(columns) if columns else '*'
