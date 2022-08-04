@@ -3,6 +3,8 @@ import shutil
 import tempfile
 from pathlib import Path
 
+import pandas as pd
+
 
 def copy_to_temp(path: str) -> str:
     """
@@ -28,3 +30,10 @@ def copy_to_temp(path: str) -> str:
             os.remove(target_path)
 
         return shutil.copy(path, target_path)
+
+
+def frames_equal_up_to_row_ordering(df1: pd.DataFrame, df2: pd.DataFrame) -> bool:
+    if (df1.columns != df2.columns).any():
+        return False
+    merged = df1.merge(df2, on=df1.columns.tolist(), how='outer', indicator=True)
+    return (merged['_merge'] == 'both').all()
