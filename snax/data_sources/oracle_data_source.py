@@ -53,6 +53,7 @@ class OracleDataSource(DataSourceBase):
         inserted_key_values = MultiIndex.from_frame(data[key])
 
         inserted_in_existing = [item in existing_key_values for item in inserted_key_values]
+        inserted_not_in_existing = [not item for item in inserted_in_existing]
         existing_columns = get_colnames(self._table, self._schema, self._engine)
         new_columns = [colname for colname in list(data.columns) if colname not in existing_columns]
 
@@ -61,10 +62,14 @@ class OracleDataSource(DataSourceBase):
             if any(inserted_in_existing) and len(common_existing_and_inserted_columns) > 0:
                 raise ValueError(f'Data already exists in {self._schema}.{self._table}')
 
-        add_columns(new_columns, data, self._table, self._schema, self._engine)
-        upsert(key, new_columns, data, self._table, self._schema, self._engine)
-        upsert(key, columns, data[[not item for item in inserted_in_existing]], self._table, self._schema, self._engine)
-        if if_exists == 'overwrite':
+        if len(new_columns) > 0:
+            add_columns(new_columns, data, self._table, self._schema, self._engine)
+            upsert(key, new_columns, data, self._table, self._schema, self._engine)
+
+        if any(inserted_not_in_existing):
+            upsert(key, columns, data[inserted_not_in_existing], self._table, self._schema, self._engine)
+
+        if if_exists == 'replace' and any(inserted_in_existing):
             upsert(key, columns, data[inserted_in_existing], self._table, self._schema, self._engine)
 
     def delete(self):
