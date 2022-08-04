@@ -264,6 +264,32 @@ def test_upsert_inserting_new_columns(engine):
     assert frames_equal_up_to_row_ordering(altered_data, expected_altered_data)
 
 
+def test_upsert_single_id_column(engine):
+    new_data = pd.DataFrame({
+        'id': [1, 2, 5],
+        'first_name': ['John', 'Jane', 'Mary']
+    })
+
+    upsert(
+        key=['id'],
+        columns=['first_name'],
+        data=new_data, table=SAMPLE_DATA_TABLE, schema=ORACLE_SCHEMA, engine=engine
+    )
+
+    altered_data = pd.read_sql(sql=f'SELECT * FROM {ORACLE_SCHEMA}.{SAMPLE_DATA_TABLE}', con=engine)
+    expected_altered_data = pd.DataFrame({
+        'id': [1, 2, 3, 5],
+        'first_name': ['John', 'Jane', 'Mary', 'Mary'],
+        'age': [30.0, 25.0, 40.0, None],
+        'temperature': [98.6, 97.8, 98.3, None],
+        'date_start': ['2020-01-01', '2020-01-02', '2020-01-03', None],
+        'time_start': ['12:00:00', '12:00:00', '12:00:00', None],
+        'is_active': [1.0, 0.0, 1.0, None],
+        'datetime_start': ['2020-01-01 12:00:00', '2020-01-02 12:00:00', '2020-01-03 12:00:00', None]
+    })
+    assert frames_equal_up_to_row_ordering(altered_data, expected_altered_data)
+
+
 def test_get_data_subset_in_db(engine):
     data = pd.DataFrame({
         'id': [1, 2, 3],
