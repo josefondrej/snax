@@ -9,6 +9,7 @@ from snax.data_sources.data_source_base import DataSourceBase
 from snax.data_sources.examples import csv, in_memory, oracle
 from snax.entity import Entity
 from snax.feature import Feature
+from snax.utils import frames_equal_up_to_row_ordering
 from snax.value_type import Int, String, Bool, Timestamp
 
 _data_source_backend_to_examples_module = {
@@ -164,9 +165,10 @@ def test_insert_full_new_row(users_with_nas_data_source):
                  'last_name', 'gender', 'timestamp', 'age', 'is_subscribed', 'children'],
         data=new_data
     )
-    data = users_with_nas_data_source.select()
-    retrieved_new_data = data[data['id'].isin([0, 11])]
-    assert_frame_equal(new_data.reset_index(drop=True), retrieved_new_data.reset_index(drop=True), check_dtype=False)
+    retrieved_data = users_with_nas_data_source.select()
+    filtered_retrieved_data = retrieved_data[retrieved_data['id'].isin([0, 11])]
+    assert_frame_equal(new_data.reset_index(drop=True), filtered_retrieved_data.reset_index(drop=True),
+                       check_dtype=False)
 
 
 def test_insert_partial_new_row(users_with_nas_data_source):
@@ -181,8 +183,8 @@ def test_insert_partial_new_row(users_with_nas_data_source):
         if_exists='error'
     )
     retrieved_data = users_with_nas_data_source.select([Entity('user', join_keys=['id']), Feature('gender', String)])
-    retrieved_new_data = retrieved_data[retrieved_data['id'].isin([0, 11])]
-    assert_frame_equal(data.reset_index(drop=True), retrieved_new_data[['id', 'gender']].reset_index(drop=True))
+    filtered_retrieved_data = retrieved_data[retrieved_data['id'].isin([0, 11])]
+    assert_frame_equal(data.reset_index(drop=True), filtered_retrieved_data[['id', 'gender']].reset_index(drop=True))
 
 
 def test_insert_existing_data_replace(users_with_nas_data_source):
@@ -198,8 +200,48 @@ def test_insert_existing_data_replace(users_with_nas_data_source):
     )
     retrieved_data = users_with_nas_data_source.select(['id', 'first_name'])
     retrieved_data.sort_values(by='id', inplace=True)
-    updated_retrieved_data = retrieved_data[retrieved_data['id'].isin([4, 5, 6])]
-    assert_frame_equal(data.reset_index(drop=True), updated_retrieved_data.reset_index(drop=True))
+    filtered_retrieved_data = retrieved_data[retrieved_data['id'].isin([4, 5, 6])]
+    assert_frame_equal(data.reset_index(drop=True), filtered_retrieved_data.reset_index(drop=True))
+
+
+def test_insert_multikey_int_int(nhl_data_source):
+    data = pd.DataFrame({
+        'game_id': [2016020045, 2017020812, 2015020314],
+        'season': [20162017, 20172018, 20152016],
+        'home_goals': [3, 2, 1],
+    })
+    nhl_data_source.insert(
+        key=['game_id', 'season'],
+        columns=['home_goals'],
+        data=data,
+        if_exists='replace'
+    )
+    retrieved_data = nhl_data_source.select(['game_id', 'season', 'home_goals'])
+    filtered_retrieved_data = retrieved_data[retrieved_data['game_id'].isin([2016020045, 2017020812, 2015020314])]
+    assert frames_equal_up_to_row_ordering(data, filtered_retrieved_data)
+
+
+def test_insert_multikey_int_str(nhl_data_source):
+    data = pd.DataFrame({
+        'game_id': [2016020045, 2017020812, 2015020314],
+        'venue': ['United Center', 'KeyBank Center', 'foo bar'],
+        'home_goals': [0, 1, 2]
+    })
+    nhl_data_source.insert(
+        key=['game_id', 'venue'],
+        columns=['home_goals'],
+        data=data,
+        if_exists='replace'
+    )
+    retrieved_data = nhl_data_source.select(['game_id', 'venue', 'home_goals'])
+    filtered_retrieved_data = retrieved_data[retrieved_data['game_id'].isin([2016020045, 2017020812, 2015020314])]
+    expected_filtered_retrieved_data = pd.DataFrame([
+        {'game_id': 2016020045, 'venue': 'United Center', 'home_goals': 0},
+        {'game_id': 2017020812, 'venue': 'KeyBank Center', 'home_goals': 1},
+        {'game_id': 2015020314, 'venue': 'MTS Centre', 'home_goals': 1},
+        {'game_id': 2015020314, 'venue': 'foo bar', 'home_goals': 2}
+    ])
+    assert frames_equal_up_to_row_ordering(filtered_retrieved_data, expected_filtered_retrieved_data)
 
 
 def test_insert_existing_data_error(users_with_nas_data_source):
@@ -213,8 +255,8 @@ def test_insert_existing_data_ignore(users_with_nas_data_source):
     users_with_nas_data_source.insert(key=['id'], columns=['first_name'], data=data, if_exists='ignore')
     retrieved_data = users_with_nas_data_source.select(['id', 'first_name'])
 
-    updated_retrieved_data = retrieved_data[retrieved_data['id'] == 4]
-    assert str(updated_retrieved_data['first_name'].iloc[0]) == 'Germaine'
+    filtered_retrieved_data = retrieved_data[retrieved_data['id'] == 4]
+    assert str(filtered_retrieved_data['first_name'].iloc[0]) == 'Germaine'
 
 
 def test_select_from_datasource_with_field_mapping(users_with_nas_field_mapping_data_source):
