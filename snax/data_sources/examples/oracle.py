@@ -1,6 +1,7 @@
 import os
 
 import pandas as pd
+import sqlalchemy.types
 from sqlalchemy import create_engine
 
 from snax.data_sources.oracle_data_source import OracleDataSource
@@ -29,7 +30,8 @@ def none_if_oracle_not_set(func):
 @none_if_oracle_not_set
 def create_nhl_games() -> OracleDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
-    _NHL_DATA.to_sql(con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_NHL_TABLE, if_exists='replace', index=False)
+    _NHL_DATA.to_sql(con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_NHL_TABLE, if_exists='replace', index=False,
+                     dtype={'venue': sqlalchemy.types.VARCHAR(100)})
 
     return OracleDataSource(
         name='nhl_games_in_memory',
