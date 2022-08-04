@@ -6,7 +6,7 @@ from pandas import MultiIndex
 from sqlalchemy.engine import Engine
 
 from snax.data_sources._oracle_utils import drop_table, get_base_column_types, retype_dataframe, \
-    add_columns, upsert, get_data_subset_in_db, add_unique_constraint, ensure_table_exists
+    add_columns, upsert, get_data_subset_in_db, add_unique_constraint, ensure_table_exists, get_colnames
 from snax.data_sources.data_source_base import DataSourceBase
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,8 @@ class OracleDataSource(DataSourceBase):
         inserted_key_values = MultiIndex.from_frame(data[key])
 
         inserted_in_existing = [item in existing_key_values for item in inserted_key_values]
-        new_columns = [colname for colname in list(data.columns) if colname not in self._colnames]
+        existing_columns = get_colnames(self._table, self._schema, self._engine)
+        new_columns = [colname for colname in list(data.columns) if colname not in existing_columns]
 
         if if_exists == 'error':
             if any(inserted_in_existing) and len(new_columns) > 0:
