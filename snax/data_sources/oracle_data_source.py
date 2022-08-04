@@ -5,7 +5,7 @@ import pandas as pd
 from pandas import MultiIndex
 from sqlalchemy.engine import Engine
 
-from snax.data_sources._oracle_utils import drop_table, get_column_types, retype_dataframe, \
+from snax.data_sources._oracle_utils import drop_table, get_base_column_types, retype_dataframe, \
     add_columns, upsert, get_data_subset_in_db, add_unique_constraint
 from snax.data_sources.data_source_base import DataSourceBase
 
@@ -13,10 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 class OracleDataSource(DataSourceBase):
-    def __init__(self, name: str, schema: str, table: str, engine: Engine,
-                 field_mapping: Optional[Dict[str, str]] = None, tags: Optional[Dict] = None):
-        """
-        Oracle DB based data source
+    """
+    Oracle DB based data source
 
         Args:
             name: Name of the data source
@@ -25,7 +23,9 @@ class OracleDataSource(DataSourceBase):
             table: Name of the table where the data is located
             field_mapping: A mapping from field names in this data source to feature names
             tags: Tags for the data source
-        """
+    """
+    def __init__(self, name: str, schema: str, table: str, engine: Engine,
+                 field_mapping: Optional[Dict[str, str]] = None, tags: Optional[Dict] = None):
         super().__init__(name=name, field_mapping=field_mapping, tags=tags)
         self._engine = engine
         self._schema = schema
@@ -44,7 +44,7 @@ class OracleDataSource(DataSourceBase):
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
         add_unique_constraint(key, self._table, self._schema, self._engine)
-        colname_to_type = get_column_types(self._schema, self._engine, self._table)
+        colname_to_type = get_base_column_types(self._schema, self._engine, self._table)
         data = retype_dataframe(colname_to_type, data)
 
         existing_key_values = MultiIndex.from_frame(

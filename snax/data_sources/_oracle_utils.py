@@ -4,6 +4,7 @@ from typing import List, Dict, Optional
 import pandas as pd
 from sqlalchemy import MetaData, Table, String, Integer, Float, Boolean
 from sqlalchemy.engine import Engine
+from sqlalchemy.exc import DatabaseError
 from sqlalchemy.sql.type_api import TypeEngine
 
 logger = logging.getLogger(__name__)
@@ -38,30 +39,70 @@ def get_colnames(table: str, schema: str, engine: Engine) -> List[str]:
     return [col.name for col in table.columns]
 
 
-def get_column_types(table: str, schema: str, engine: Engine) -> Dict[str, Optional[type]]:
+def get_sqlalchemy_column_types(table: str, schema: str, engine: Engine) -> Dict[str, Optional[type]]:
     sqlalchemy_table = get_sqlalchemy_table(table, schema, engine)
     colname_to_type = dict()
     for column in sqlalchemy_table.columns:
-        column_type = sqlalchemy_column_type_to_base_type(column.type)
-        colname_to_type[column.name] = column_type
+        colname_to_type[column.name] = column.type
     return colname_to_type
+
+
+def get_base_column_types(table: str, schema: str, engine: Engine) -> Dict[str, Optional[type]]:
+    sqlalchemy_column_types = get_sqlalchemy_column_types(table, schema, engine)
+    return {colname: sqlalchemy_column_type_to_base_type(column_type) for colname, column_type in
+            sqlalchemy_column_types.items()}
 
 
 def add_unique_constraint(key: List[str], table: str, schema: str, engine: Engine):
     constraint_name = '_'.join(key) + '_unique'
-    sql = f'ALTER TABLE {schema}.{table} ADD CONSTRAINT {constraint_name} UNIQUE ({", ".join(key)});'
+    sql = f'ALTER TABLE {schema}.{table} ADD CONSTRAINT {constraint_name} UNIQUE ({", ".join(key)})'
     try:
         engine.execute(sql)
-    except Exception as exception:  # TODO: Implement the exception handling
-        print(exception)
+    except DatabaseError as exception:
+        if len(exception.args) > 0 and 'ORA-02261' in exception.args[0]:
+            logger.debug(f'Unique constraint {constraint_name} already exists')
+        else:
+            raise exception
+
+
+def get_oracle_type(column_type: type) -> str:
+    if isinstance(column_type, int):
+        return 'NUMBER'
+    elif isinstance(column_type, float):
+        return 'FLOAT'
+    elif isinstance(column_type, str):
+        return 'VARCHAR2'
+    elif isinstance(column_type, bool):
+        return 'NUMBER'
+    else:
+        return 'CLOB'
 
 
 def add_columns(columns: List[str], data: pd.DataFrame, table: str, schema: str, engine: Engine):
-    raise NotImplementedError  # TODO: Implement
+    for column in columns:
+        column_type = data[column].dtype
+        oracle_type = get_oracle_type(column_type)
+        sql = f'ALTER TABLE {schema}.{table} ADD {column} {oracle_type}'
+        engine.execute(sql)
+        logger.info(f'Added column {column} to table {schema}.{table}')
 
 
 def upsert(key: List[str], columns: List[str], data: pd.DataFrame, table: str, schema: str, engine: Engine):
-    raise NotImplementedError  # TODO: Implement
+    tmp_table = f'{table}_tmp'
+    table_column_types = get_sqlalchemy_column_types(table, schema, engine)
+    data[key + columns].to_sql(
+        tmp_table, engine, if_exists='replace', schema=schema, index=False, dtype=table_column_types)
+
+    condition = ' and '.join([f'{table}.{key_} = {tmp_table}.{key_}' for key_ in key])
+    sql = f'merge into {schema}.{table} using {schema}.{tmp_table} on ({condition}) ' \
+          f'when matched then update set {", ".join([f"{table}.{column} = {tmp_table}.{column}" for column in columns])} ' \
+          f'when not matched then insert ({", ".join(key + columns)}) values ({", ".join([f"{tmp_table}.{column}" for column in (key + columns)])})'
+
+    with engine.begin() as conn:
+        # See https://github.com/sqlalchemy/sqlalchemy/issues/5405 for details why we do not use just engine.execute()
+        conn.execute(sql)
+
+    drop_table(tmp_table, schema, engine)
 
 
 def get_data_subset_in_db(data: pd.DataFrame, colnames: List[str], table: str, schema: str,
@@ -105,6 +146,18 @@ def pd_dataframe_to_comma_separated_tuples(data: pd.DataFrame) -> str:
     return ', '.join(list(data.apply(pd_series_to_comma_separated_tuple, axis=1)))
 
 
+def escape_value(value: str) -> str:
+    if pd.isna(value):
+        return 'null'
+
+    if isinstance(value, str):
+        return f"'{value}'"
+    elif isinstance(value, bool):
+        return str(int(value))
+    else:
+        return str(value)
+
+
 def pd_series_to_comma_separated_tuple(series: pd.Series) -> str:
-    comma_joined = ', '.join([f"'{item}'" if isinstance(item, str) else str(item) for item in series])
+    comma_joined = ', '.join([escape_value(item) for item in series])
     return f'({comma_joined})'
