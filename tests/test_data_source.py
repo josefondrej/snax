@@ -155,7 +155,7 @@ def test_insert_full_new_row(users_with_nas_data_source):
         'gender': ['Male', 'Female'],
         'timestamp': ['2022-08-17T10:41:25', '2022-08-16T15:45:31'],
         'age': [None, 56],
-        'is_subscribed': ['False', 'True'],
+        'is_subscribed': [False, True],
         'children': [2, None],
     })
     users_with_nas_data_source.insert(
@@ -166,7 +166,7 @@ def test_insert_full_new_row(users_with_nas_data_source):
     )
     data = users_with_nas_data_source.select()
     retrieved_new_data = data[data['id'].isin([0, 11])]
-    assert_frame_equal(new_data.reset_index(drop=True), retrieved_new_data.reset_index(drop=True))
+    assert_frame_equal(new_data.reset_index(drop=True), retrieved_new_data.reset_index(drop=True), check_dtype=False)
 
 
 def test_insert_partial_new_row(users_with_nas_data_source):
