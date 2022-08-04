@@ -29,3 +29,10 @@ def create_users_with_nas_field_mapping() -> InMemoryDataSource:
             'timestamp': 'time_stamp',
         }
     )
+
+
+def create_empty_data_source() -> InMemoryDataSource:
+    return InMemoryDataSource(
+        name='empty_in_memory',
+        data=pd.DataFrame()
+    )

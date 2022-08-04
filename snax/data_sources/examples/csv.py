@@ -1,3 +1,5 @@
+from tempfile import NamedTemporaryFile
+
 from snax.data_sources.csv_data_source import CsvDataSource
 from snax.example_feature_repos.sports_feature_repo.nhl_games import data_path as original_nhl_data_path
 from snax.example_feature_repos.users_with_nas_feature_repo.users_with_nas import \
@@ -27,4 +29,12 @@ def create_users_with_nas_field_mapping() -> CsvDataSource:
             'is_subscribed': 'issubscribed',
             'timestamp': 'time_stamp',
         }
+    )
+
+
+def create_empty_data_source() -> CsvDataSource:
+    tmp_file = NamedTemporaryFile(suffix='.csv')
+    return CsvDataSource(
+        name='empty_csv',
+        csv_file_path=tmp_file.name
     )

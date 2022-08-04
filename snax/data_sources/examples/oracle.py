@@ -71,3 +71,14 @@ def create_users_with_nas_field_mapping() -> OracleDataSource:
             'timestamp': 'time_stamp',
         }
     )
+
+
+@none_if_oracle_not_set
+def create_empty_data_source() -> OracleDataSource:
+    engine = create_engine(_ORACLE_CONNECTION_STRING)
+    return OracleDataSource(
+        name='empty_oracle',
+        schema=_ORACLE_SCHEMA,
+        table='empty_table',
+        engine=engine
+    )
