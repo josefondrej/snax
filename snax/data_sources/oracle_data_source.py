@@ -45,7 +45,7 @@ class OracleDataSource(DataSourceBase):
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
         add_unique_constraint(key, self._table, self._schema, self._engine)
-        colname_to_type = get_base_column_types(self._schema, self._engine, self._table)
+        colname_to_type = get_base_column_types(self._table, self._schema, self._engine)
         data = retype_dataframe(colname_to_type, data)
 
         existing_key_values = MultiIndex.from_frame(
