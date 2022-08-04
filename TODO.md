@@ -1,13 +1,12 @@
 # TODO
 
 - [ ] Test for inserting new data into empty data source
-- [ ] Test inserting with multi-keys
-- [ ] Implement `FeatureStore.add_features_to_dataframe`
-- [ ] Unify the query language in `DataSource` so it does not depend on the type of the `DataSource`
 - [ ] Add few data source specific tests to test that at least some `where_sql_query` parameter values work
+- [ ] Implement `FeatureStore.add_features_to_dataframe`
 - [ ] Handle reserved column names in oracle data source
+- [ ] Unify the query language in `DataSource` so it does not depend on the type of the `DataSource`
 
-
+- [x] Test inserting with multi-keys
 - [x] Make example datasets smaller
 - [x] Implement `utils/copy_to_temp.py`
 - [x] Use `utils/copy_to_temp.py` in `test_repo_contents.py`, `test_csv_data_source.py`, `test_feature_store.py`
