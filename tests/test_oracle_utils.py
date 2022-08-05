@@ -116,8 +116,12 @@ def test_add_unique_constraint(engine):
     sql = f"SELECT * FROM user_cons_columns where CONSTRAINT_NAME = '{ORACLE_SCHEMA.upper()}_{SAMPLE_DATA_TABLE.upper()}_ID_FIRST_NAME_UNIQUE'"
     result = engine.execute(sql)
     expected_result = [
-        ('ONDREJ', f'{ORACLE_SCHEMA.upper()}_{SAMPLE_DATA_TABLE.upper()}_ID_FIRST_NAME_UNIQUE', 'SAMPLE_DATA', 'ID', 1),
-        ('ONDREJ', f'{ORACLE_SCHEMA.upper()}_{SAMPLE_DATA_TABLE.upper()}_ID_FIRST_NAME_UNIQUE', 'SAMPLE_DATA',
+        (ORACLE_SCHEMA.upper(),
+         f'{ORACLE_SCHEMA.upper()}_{SAMPLE_DATA_TABLE.upper()}_ID_FIRST_NAME_UNIQUE',
+         'SAMPLE_DATA', 'ID', 1),
+        (ORACLE_SCHEMA.upper(),
+         f'{ORACLE_SCHEMA.upper()}_{SAMPLE_DATA_TABLE.upper()}_ID_FIRST_NAME_UNIQUE',
+         'SAMPLE_DATA',
          'FIRST_NAME', 2)]
     assert set(result) == set(expected_result)
 
