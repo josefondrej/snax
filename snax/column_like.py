@@ -6,7 +6,7 @@ from snax.feature import Feature
 ColumnLike = Union[Entity, Feature, str]
 
 
-def get_colnames(column_like: ColumnLike) -> List[str]:
+def get_feature_names(column_like: ColumnLike) -> List[str]:
     if isinstance(column_like, Entity):
         return column_like.join_keys
     elif isinstance(column_like, Feature):

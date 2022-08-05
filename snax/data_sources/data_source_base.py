@@ -3,7 +3,7 @@ from typing import Optional, Dict, List
 
 import pandas as pd
 
-from snax.column_like import ColumnLike, get_colnames
+from snax.column_like import ColumnLike, get_feature_names
 
 _VALID_IF_EXISTS_OPTIONS = ['error', 'ignore', 'replace']
 
@@ -123,6 +123,6 @@ class DataSourceBase(ABC):
         if column_likes is None:
             return None
 
-        feature_names = sum([get_colnames(column_like) for column_like in column_likes], [])
+        feature_names = sum([get_feature_names(column_like) for column_like in column_likes], [])
         column_names = list(map(lambda name: self._inverse_field_mapping.get(name, name), feature_names))
         return column_names
