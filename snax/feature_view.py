@@ -1,5 +1,7 @@
 from typing import List, Optional, Dict
 
+import pandas as pd
+
 from snax.data_sources.data_source_base import DataSourceBase
 from snax.entity import Entity
 from snax.feature import Feature
@@ -80,3 +82,7 @@ class FeatureView:
     @property
     def tags(self) -> Dict[str, str]:
         return self._tags
+
+    def add_features_to_dataframe(self, dataframe: pd.DataFrame, feature_names: List[str],
+                                  entity: Optional[Entity] = None) -> pd.DataFrame:
+        raise NotImplementedError('TODO: Implement') # TODO: Implement

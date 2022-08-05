@@ -37,7 +37,7 @@ def test_add_features_to_dataframe():
 
     feature_dataframe = feature_store.add_features_to_dataframe(
         dataframe=game_ids,
-        features=[
+        feature_names=[
             'nhl_games_csv:outcome',
             'nhl_games_csv:venue'
         ]

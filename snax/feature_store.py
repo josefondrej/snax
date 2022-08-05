@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 import pandas as pd
 
@@ -7,6 +7,17 @@ from snax.data_sources.data_source_base import DataSourceBase
 from snax.entity import Entity
 from snax.feature_view import FeatureView
 from snax.repo_contents import parse_repo, RepoContents
+
+
+def group_features(features: List[str]) -> Dict[str, List[str]]:
+    feature_dict = {}
+    for feature in features:
+        view_name, feature_name = feature.split(':')  # TODO: Define the splitter somewhere
+        if view_name not in feature_dict:
+            feature_dict[view_name] = []
+        feature_dict[view_name].append(feature_name)
+
+    return feature_dict
 
 
 class FeatureStore:
@@ -22,18 +33,23 @@ class FeatureStore:
     def repo_path(self) -> str:
         return self._repo_path
 
-    def add_features_to_dataframe(self, dataframe: pd.DataFrame, features: List[str],
+    def add_features_to_dataframe(self, dataframe: pd.DataFrame, feature_names: List[str],
                                   entity: Optional[List[ColumnLike]] = None) -> pd.DataFrame:
         """
         Retrieve features by their full name (feature_view_name:feature_name) and add them to the dataframe
 
         Args:
             dataframe: Entity's key values dataframe to add features to
-            features: List of full feature names to add to the dataframe
+            feature_names: List of full feature names to add to the dataframe in the format view_name:feature_name
             entity: Optional entity to specify what columns to use for identifying the entity in the dataframe
                 if it contains more columns than are required to identify the entity
         """
-        raise NotImplemented('TODO: Implement')
+        feature_groups = group_features(feature_names)
+        for view_name, feature_names in feature_groups.items():
+            view = self.get_feature_view(view_name)
+            dataframe = view.add_features_to_dataframe(dataframe, feature_names, entity)
+
+        return dataframe
 
     def list_feature_views(self) -> List[FeatureView]:
         return self._repo_contents.feature_views
