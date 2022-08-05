@@ -3,6 +3,7 @@ from typing import List, Dict, Optional
 
 import numpy as np
 import pandas as pd
+import sqlalchemy
 from sqlalchemy import MetaData, Table, String, Integer, Float, Boolean
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import DatabaseError
@@ -26,8 +27,14 @@ def ensure_table_exists(table: str, schema: str, engine: Engine):
 def drop_table(table: str, schema: str, engine: Engine):
     """Drops schema.table from the Oracle DB"""
     query = f'DROP TABLE {schema}.{table}'
-    engine.execute(query)
-    logger.info(f'Table {schema}.{table} dropped')
+    try:
+        engine.execute(query)
+        logger.info(f'Table {schema}.{table} dropped')
+    except sqlalchemy.exc.DatabaseError as exception:
+        if len(exception.args) > 0 and 'ORA-00942' in exception.args[0]:
+            logger.debug(f'Can\'t drop table that doesn\'t exist: {exception.args[0]}')
+        else:
+            raise exception
 
 
 def get_sqlalchemy_table(table: str, schema: str, engine: Engine) -> Table:
@@ -55,7 +62,7 @@ def get_base_column_types(table: str, schema: str, engine: Engine) -> Dict[str, 
 
 
 def add_unique_constraint(key: List[str], table: str, schema: str, engine: Engine):
-    constraint_name = schema + '_' + table + '_' + '_'.join(key) + '_unique'
+    constraint_name = schema.upper() + '_' + table.upper() + '_' + '_'.join([k.upper() for k in key]) + '_unique'
     sql = f'ALTER TABLE {schema}.{table} ADD CONSTRAINT {constraint_name} UNIQUE ({", ".join(key)})'
     try:
         engine.execute(sql)

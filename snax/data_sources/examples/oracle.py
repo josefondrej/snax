@@ -1,9 +1,11 @@
+import logging
 import os
 
 import pandas as pd
 import sqlalchemy.types
 from sqlalchemy import create_engine
 
+from snax.data_sources._oracle_utils import drop_table
 from snax.data_sources.oracle_data_source import OracleDataSource
 from snax.example_feature_repos.sports_feature_repo.nhl_games import data_path as original_nhl_data_path
 from snax.example_feature_repos.users_with_nas_feature_repo.users_with_nas import \
@@ -16,6 +18,8 @@ _ORACLE_USERS_WITH_NAS_TABLE = 'users_with_nas'
 
 _NHL_DATA = pd.read_csv(original_nhl_data_path)
 _USERS_WITH_NA_DATA = pd.read_csv(original_users_with_na_data_path)
+
+logger = logging.getLogger(__name__)
 
 
 def none_if_oracle_not_set(func):
@@ -76,6 +80,8 @@ def create_users_with_nas_field_mapping() -> OracleDataSource:
 @none_if_oracle_not_set
 def create_empty_data_source() -> OracleDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
+    drop_table(table=_ORACLE_NHL_TABLE, schema=_ORACLE_SCHEMA, engine=engine)
+
     return OracleDataSource(
         name='empty_oracle',
         schema=_ORACLE_SCHEMA,

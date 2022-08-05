@@ -48,10 +48,7 @@ def get_engine() -> Engine:
         return None
 
     engine = create_engine(ORACLE_CONNECTION_STRING)
-    try:
-        engine.execute(f'DROP TABLE {ORACLE_SCHEMA}.{SAMPLE_DATA_TABLE}')
-    except Exception as exception:
-        pass  # TODO: Handle the exception
+    drop_table(table=SAMPLE_DATA_TABLE, schema=ORACLE_SCHEMA, engine=engine)
 
     return engine
 
