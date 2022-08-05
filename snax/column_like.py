@@ -15,3 +15,8 @@ def get_feature_names(column_like: ColumnLike) -> List[str]:
         return [column_like]
     else:
         raise TypeError(f'Unsupported type {type(column_like)}')
+
+
+def get_features_names(column_likes: List[ColumnLike]) -> List[str]:
+    column_likes_nested = [get_feature_names(column_like) for column_like in column_likes]
+    return sum(column_likes_nested, [])
