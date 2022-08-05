@@ -55,7 +55,7 @@ def get_base_column_types(table: str, schema: str, engine: Engine) -> Dict[str, 
 
 
 def add_unique_constraint(key: List[str], table: str, schema: str, engine: Engine):
-    constraint_name = '_'.join(key) + '_unique'
+    constraint_name = schema + '_' + table + '_' + '_'.join(key) + '_unique'
     sql = f'ALTER TABLE {schema}.{table} ADD CONSTRAINT {constraint_name} UNIQUE ({", ".join(key)})'
     try:
         engine.execute(sql)
