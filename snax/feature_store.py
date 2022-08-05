@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
 
+from snax.column_like import ColumnLike
 from snax.data_sources.data_source_base import DataSourceBase
 from snax.entity import Entity
 from snax.feature_view import FeatureView
@@ -21,13 +22,16 @@ class FeatureStore:
     def repo_path(self) -> str:
         return self._repo_path
 
-    def add_features_to_dataframe(self, dataframe: pd.DataFrame, features: List[str]) -> pd.DataFrame:
+    def add_features_to_dataframe(self, dataframe: pd.DataFrame, features: List[str],
+                                  entity: Optional[List[ColumnLike]] = None) -> pd.DataFrame:
         """
         Retrieve features by their full name (feature_view_name:feature_name) and add them to the dataframe
 
         Args:
-            dataframe: Dataframe to add features to
+            dataframe: Entity's key values dataframe to add features to
             features: List of full feature names to add to the dataframe
+            entity: Optional entity to specify what columns to use for identifying the entity in the dataframe
+                if it contains more columns than are required to identify the entity
         """
         raise NotImplemented('TODO: Implement')
 
