@@ -1,6 +1,7 @@
 import logging
 from typing import List, Dict, Optional
 
+import numpy as np
 import pandas as pd
 from sqlalchemy import MetaData, Table, String, Integer, Float, Boolean
 from sqlalchemy.engine import Engine
@@ -161,3 +162,30 @@ def escape_value(value: str) -> str:
 def pd_series_to_comma_separated_tuple(series: pd.Series) -> str:
     comma_joined = ', '.join([escape_value(item) for item in series])
     return f'({comma_joined})'
+
+
+numpy_dtype_to_oracle_dict = {
+    np.dtype('O'): 'CLOB',
+    np.dtype('int32'): 'FLOAT',
+    np.dtype('int64'): 'NUMBER',
+    np.dtype('float32'): 'FLOAT',
+    np.dtype('float64'): 'FLOAT',
+    np.dtype('bool'): 'NUMBER'
+}
+
+
+def numpy_dtype_to_oracle(dtype: type) -> str:
+    return numpy_dtype_to_oracle_dict.get(dtype, 'CLOB')
+
+
+def add_column(column: str, dtype: type, table: str, schema: str, engine: Engine):
+    oracle_dtype = numpy_dtype_to_oracle(dtype)
+    sql = f'alter table {schema}.{table} add {column} {oracle_dtype}'
+    engine.execute(sql)
+
+
+def ensure_columns_exist(columns: List[str], dtypes: Dict[str, type], table: str, schema: str, engine: Engine):
+    columns_in_db = get_colnames(table, schema, engine)
+    for column in columns:
+        if column not in columns_in_db:
+            add_column(column, dtypes[column], table, schema, engine)
