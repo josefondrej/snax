@@ -1,3 +1,4 @@
+import os
 from typing import Optional, Dict, List
 
 import pandas as pd
@@ -21,8 +22,11 @@ class CsvDataSource(InMemoryDataSource):
         return self._separator
 
     def _load_data(self) -> pd.DataFrame:
-        data = pd.read_csv(self.csv_file_path, sep=self.separator)
-        self._data = data
+        if os.path.exists(self._csv_file_path):
+            data = pd.read_csv(self.csv_file_path, sep=self.separator)
+            self._data = data
+        else:
+            self._data = pd.DataFrame()
 
     def _dump_data(self):
         self._data.to_csv(self.csv_file_path, sep=self.separator, index=False)
