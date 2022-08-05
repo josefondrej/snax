@@ -8,6 +8,17 @@ from snax.example_feature_repos import sports_feature_repo
 from snax.feature_store import FeatureStore
 
 
+def test_initialize():
+    sports_feature_repo_path = Path(sports_feature_repo.__file__).parent
+    feature_store = FeatureStore(repo_path=sports_feature_repo_path)
+    data_source_names = [data_source.name for data_source in feature_store.list_data_sources()]
+    entity_names = [entity.name for entity in feature_store.list_entities()]
+    feature_view_names = [feature_view.name for feature_view in feature_store.list_feature_views()]
+    assert data_source_names == ['nhl_games_csv']
+    assert entity_names == ['game', '__dummy']
+    assert feature_view_names == ['nhl_games_csv']
+
+
 @skip('TODO: FeatureStore.add_features_to_dataframe not implemented yet')
 def test_add_features_to_dataframe():
     sports_feature_repo_path = Path(sports_feature_repo.__file__).parent
