@@ -34,8 +34,9 @@ def none_if_oracle_not_set(func):
 @none_if_oracle_not_set
 def create_nhl_games() -> OracleDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
-    _NHL_DATA.to_sql(con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_NHL_TABLE, if_exists='replace', index=False,
-                     dtype={'venue': sqlalchemy.types.VARCHAR(100)})
+    _NHL_DATA.to_sql(
+        con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_NHL_TABLE, if_exists='replace', index=False,
+        dtype={'venue': sqlalchemy.types.VARCHAR(100)})  # Change to VARCHAR because default CLOB can't be index
 
     return OracleDataSource(
         name='nhl_games_in_memory',
@@ -49,7 +50,8 @@ def create_nhl_games() -> OracleDataSource:
 def create_users_with_nas() -> OracleDataSource:
     engine = create_engine(_ORACLE_CONNECTION_STRING)
     _USERS_WITH_NA_DATA.to_sql(
-        con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_USERS_WITH_NAS_TABLE, if_exists='replace', index=False)
+        con=engine, schema=_ORACLE_SCHEMA, name=_ORACLE_USERS_WITH_NAS_TABLE, if_exists='replace', index=False,
+        dtype={'string_id': sqlalchemy.types.VARCHAR(100)})  # Change to VARCHAR because default CLOB can't be index
 
     return OracleDataSource(
         name='users_with_nas_in_memory',
