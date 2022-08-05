@@ -22,6 +22,7 @@ class InMemoryDataSource(DataSourceBase):
             return data_subset
 
     def _insert(self, key: List[str], columns: List[str], data: pd.DataFrame, if_exists: str = 'error'):
+        self._ensure_key_in_data(key)
         data_to_insert = data[key + columns].copy()
 
         data_index = pd.MultiIndex.from_frame(self._data[key])
@@ -49,3 +50,8 @@ class InMemoryDataSource(DataSourceBase):
                     self._data.loc[original_index_of_inserted_row, new_columns] = new_columns
                 else:
                     raise ValueError(f'Unknown if_exists value: {if_exists}')
+
+    def _ensure_key_in_data(self, key: List[str]):
+        for key_ in key:
+            if key_ not in self._data:
+                self._data[key_] = None
