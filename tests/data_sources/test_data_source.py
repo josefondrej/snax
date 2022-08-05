@@ -165,11 +165,12 @@ def test_insert_full_new_row(users_with_nas_data_source):
         'age': [None, 56],
         'is_subscribed': [False, True],
         'children': [2, None],
+        'string_id': ['x', 'y']
     })
     users_with_nas_data_source.insert(
         key=[Entity('user', join_keys=['id'])],
         columns=[Feature('first_name', dtype=String),
-                 'last_name', 'gender', 'timestamp', 'age', 'is_subscribed', 'children'],
+                 'last_name', 'gender', 'timestamp', 'age', 'is_subscribed', 'children', 'string_id'],
         data=new_data
     )
     retrieved_data = users_with_nas_data_source.select()
