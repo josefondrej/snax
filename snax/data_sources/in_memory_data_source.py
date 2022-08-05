@@ -1,8 +1,14 @@
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Any
 
 import pandas as pd
 
 from snax.data_sources.data_source_base import DataSourceBase
+
+
+def escape(value: Any) -> str:
+    if isinstance(value, str):
+        return f"'{value}'"
+    return value
 
 
 class InMemoryDataSource(DataSourceBase):
@@ -50,6 +56,11 @@ class InMemoryDataSource(DataSourceBase):
                     self._data.loc[original_index_of_inserted_row, new_columns] = new_columns
                 else:
                     raise ValueError(f'Unknown if_exists value: {if_exists}')
+
+    def _where_sql_query_from_key_values(self, key: List[str], key_values: pd.DataFrame) -> str:
+        row_to_string = lambda row: '(' + ' and '.join(f'{key_}=={escape(row[key_])}' for key_ in key) + ')'
+        query = ' or '.join(list(key_values.apply(row_to_string, axis=1)))
+        return query
 
     def _ensure_key_in_data(self, key: List[str]):
         for key_ in key:

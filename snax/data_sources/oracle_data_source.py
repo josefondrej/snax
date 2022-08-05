@@ -6,7 +6,8 @@ from pandas import MultiIndex
 from sqlalchemy.engine import Engine
 
 from snax.data_sources._oracle_utils import drop_table, add_columns, upsert, get_data_subset_in_db, \
-    add_unique_constraint, ensure_table_exists, get_colnames, ensure_columns_exist
+    add_unique_constraint, ensure_table_exists, get_colnames, ensure_columns_exist, \
+    pd_dataframe_to_comma_separated_tuples
 from snax.data_sources.data_source_base import DataSourceBase
 
 logger = logging.getLogger(__name__)
@@ -71,6 +72,10 @@ class OracleDataSource(DataSourceBase):
 
         if if_exists == 'replace' and any(inserted_in_existing):
             upsert(key, columns, data[inserted_in_existing], self._table, self._schema, self._engine)
+
+    def _where_sql_query_from_key_values(self, key: List[str], key_values: pd.DataFrame) -> str:
+        query = f"({', '.join(key)}) IN ({pd_dataframe_to_comma_separated_tuples(key_values)})"
+        return query
 
     def delete(self):
         drop_table(self._table, self._schema, self._engine)

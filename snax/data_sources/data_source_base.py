@@ -53,16 +53,30 @@ class DataSourceBase(ABC):
     def tags(self) -> Dict:
         return self._tags
 
-    def select(self, columns: Optional[List[ColumnLike]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
+    def select(self, columns: Optional[List[ColumnLike]] = None, key: Optional[List[ColumnLike]] = None,
+               key_values: Optional[pd.DataFrame] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
         """
         Select a subset of the underlying data
+        This can be done either by specifying the key and key_values or by specifying the where_sql_query
+
         Args:
             columns: Entities, Features or feature names to select, if None, all columns are selected
+            key: List of column names giving unique constraint on a row in the data source
+            key_values: Data frame with the key values
             where_sql_query: Optional filter query to apply to the selection, for now language depends on the data source
 
         Returns:
             A DataFrame containing the selected data
         """
+        if (key is not None or key_values is not None) and where_sql_query is not None:
+            raise ValueError('Cannot specify both key, key_values and where_sql_query')
+        if (key is None and key_values is not None) or (key is not None and key_values is None):
+            raise ValueError('Must specify both key and key_values')
+
+        if key is not None and key_values is not None:
+            string_key = self._column_likes_to_colnames(key)
+            where_sql_query = self._where_sql_query_from_key_values(string_key, key_values)
+
         string_columns = self._column_likes_to_colnames(columns)
         selected_data = self._select(string_columns, where_sql_query)
         selected_data.rename(columns=self._field_mapping, inplace=True)
@@ -89,6 +103,9 @@ class DataSourceBase(ABC):
         string_key = self._column_likes_to_colnames(key)
         string_columns = self._column_likes_to_colnames(columns)
         self._insert(string_key, string_columns, data.rename(columns=self._inverse_field_mapping), if_exists)
+
+    def _where_sql_query_from_key_values(self, key: List[str], key_values: pd.DataFrame) -> str:
+        raise NotImplementedError('Has to be overridden by subclass')
 
     def _select(self, columns: Optional[List[str]] = None, where_sql_query: Optional[str] = None) -> pd.DataFrame:
         raise NotImplementedError('Has to be overridden by subclass')

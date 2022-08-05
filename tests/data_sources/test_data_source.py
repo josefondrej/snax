@@ -1,4 +1,5 @@
 from typing import Union
+from unittest import skip
 
 import pandas as pd
 import pytest
@@ -7,6 +8,7 @@ from pandas.testing import assert_frame_equal
 
 from snax.data_sources.data_source_base import DataSourceBase
 from snax.data_sources.examples import csv, in_memory, oracle
+from snax.data_sources.oracle_data_source import OracleDataSource
 from snax.entity import Entity
 from snax.feature import Feature
 from snax.utils import frames_equal_up_to_row_ordering
@@ -114,6 +116,57 @@ def test_select_timestamp_column_with_missings(users_with_nas_data_source):
 def test_select_all_columns(users_with_nas_data_source):
     data = users_with_nas_data_source.select()
     assert isinstance(data, pd.DataFrame)
+
+
+def test_select_by_key_values_single_int_index(nhl_data_source):
+    key_values = pd.DataFrame({'game_id': [2016020045, 2017020812, 2015020314]})
+    selected_data = nhl_data_source.select(
+        columns=['game_id', 'season', 'type'], key=['game_id'], key_values=key_values)
+    expected_selected_data = pd.DataFrame({
+        'game_id': [2016020045, 2017020812, 2015020314],
+        'season': [20162017, 20172018, 20152016],
+        'type': ['R', 'R', 'R']
+    })
+    assert frames_equal_up_to_row_ordering(selected_data, expected_selected_data)
+
+
+def test_select_by_key_values_single_int_index(nhl_data_source):
+    if isinstance(nhl_data_source, OracleDataSource):
+        # TODO: Implement corresponding behavior for Oracle
+        return skip('Handling case-sensitive column names not yet implemented for Oracle data source')
+
+    key_values = pd.DataFrame({'game_id': [2016020045, 2017020812, 2015020314]})
+    selected_data = nhl_data_source.select(
+        columns=['game_id', 'date_time_GMT'], key=['game_id'], key_values=key_values)
+    expected_selected_data = pd.DataFrame({
+        'game_id': [2016020045, 2017020812, 2015020314],
+        'date_time_GMT': ['2016-10-19T00:30:00Z', '2018-02-07T00:00:00Z', '2015-11-24T01:00:00Z']
+    })
+    assert frames_equal_up_to_row_ordering(selected_data, expected_selected_data)
+
+
+def test_select_by_key_values_single_string_index(users_with_nas_data_source):
+    key_values = pd.DataFrame({'string_id': ['a', 'b', 'c']})
+    selected_data = users_with_nas_data_source.select(
+        columns=['string_id', 'id', 'first_name'], key=['string_id'], key_values=key_values)
+    expected_selected_data = pd.DataFrame({
+        'string_id': ['a', 'b', 'c'],
+        'id': [1, 2, 3],
+        'first_name': ['Cirillo', 'Codi', 'Marion']
+    })
+    assert frames_equal_up_to_row_ordering(selected_data, expected_selected_data)
+
+
+def test_select_by_key_values_string_int_index(users_with_nas_data_source):
+    key_values = pd.DataFrame({'string_id': ['a', 'b', 'c'], 'id': [1, 2, 3]})
+    selected_data = users_with_nas_data_source.select(
+        columns=['string_id', 'id', 'first_name'], key=['string_id', 'id'], key_values=key_values)
+    expected_selected_data = pd.DataFrame({
+        'string_id': ['a', 'b', 'c'],
+        'id': [1, 2, 3],
+        'first_name': ['Cirillo', 'Codi', 'Marion']
+    })
+    assert frames_equal_up_to_row_ordering(selected_data, expected_selected_data)
 
 
 def test_insert_validates_argument(users_with_nas_data_source):
