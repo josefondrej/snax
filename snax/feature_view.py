@@ -5,6 +5,7 @@ import pandas as pd
 from snax.data_sources.data_source_base import DataSourceBase
 from snax.entity import Entity
 from snax.feature import Feature
+from snax.type_casting import cast_to_feature_types
 
 
 class FeatureView:
@@ -83,6 +84,35 @@ class FeatureView:
     def tags(self) -> Dict[str, str]:
         return self._tags
 
+    def get_entity(self, entity_name: str) -> Entity:
+        for entity in self.entities:
+            if entity.name == entity_name:
+                return entity
+        raise ValueError(f'Entity {entity_name} not found in feature view {self.name}')
+
+    def get_feature(self, feature_name: str) -> Feature:
+        for feature in self.features:
+            if feature.name == feature_name:
+                return feature
+        raise ValueError(f'Feature {feature_name} not found in feature view {self.name}')
+
     def add_features_to_dataframe(self, dataframe: pd.DataFrame, feature_names: List[str],
-                                  entity: Optional[Entity] = None) -> pd.DataFrame:
-        raise NotImplementedError('TODO: Implement') # TODO: Implement
+                                  entity_name: Optional[str] = None) -> pd.DataFrame:
+        if entity_name is None:
+            raise NotImplementedError('Joins without entity not supported yet. ')
+
+        entity = self.get_entity(entity_name)
+
+        feature_values = self.source.select(
+            columns=[entity] + feature_names,
+            key=entity,
+            key_values=dataframe[entity_name.join_keys]
+        )
+
+        feature_values = cast_to_feature_types(
+            dataframe=feature_values,
+            features=[self.get_feature(feature_name) for feature_name in feature_names]
+        )
+
+        dataframe = dataframe.merge(feature_values, on=entity_name.join_keys, how='left')
+        return dataframe

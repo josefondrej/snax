@@ -2,7 +2,6 @@ from typing import List, Optional, Dict
 
 import pandas as pd
 
-from snax.column_like import ColumnLike
 from snax.data_sources.data_source_base import DataSourceBase
 from snax.entity import Entity
 from snax.feature_view import FeatureView
@@ -34,20 +33,20 @@ class FeatureStore:
         return self._repo_path
 
     def add_features_to_dataframe(self, dataframe: pd.DataFrame, feature_names: List[str],
-                                  entity: Optional[List[ColumnLike]] = None) -> pd.DataFrame:
+                                  entity_name: Optional[str] = None) -> pd.DataFrame:
         """
         Retrieve features by their full name (feature_view_name:feature_name) and add them to the dataframe
 
         Args:
             dataframe: Entity's key values dataframe to add features to
             feature_names: List of full feature names to add to the dataframe in the format view_name:feature_name
-            entity: Optional entity to specify what columns to use for identifying the entity in the dataframe
+            entity_name: Optional entity name to specify what columns to use for identifying the entity in the dataframe
                 if it contains more columns than are required to identify the entity
         """
         feature_groups = group_features(feature_names)
         for view_name, feature_names in feature_groups.items():
             view = self.get_feature_view(view_name)
-            dataframe = view.add_features_to_dataframe(dataframe, feature_names, entity)
+            dataframe = view.add_features_to_dataframe(dataframe, feature_names, entity_name)
 
         return dataframe
 
