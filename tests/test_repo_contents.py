@@ -5,7 +5,7 @@ from snax.data_sources.csv_data_source import CsvDataSource
 from snax.feature import Feature
 from snax.feature_view import FeatureView
 from snax.repo_contents import parse_repo, DUMMY_ENTITY
-from snax.utils import copy_to_temp
+from snax._utils import copy_to_temp
 from snax.value_type import Float
 
 

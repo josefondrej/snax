@@ -11,7 +11,7 @@ from snax.data_sources._oracle_utils import ensure_table_exists, drop_table, get
     get_base_column_types, add_unique_constraint, add_columns, get_data_subset_in_db, \
     sqlalchemy_column_type_to_base_type, \
     retype_dataframe, pd_series_to_comma_separated_tuple, escape_value, pd_dataframe_to_comma_separated_tuples, upsert
-from snax.utils import frames_equal_up_to_row_ordering
+from snax._utils import frames_equal_up_to_row_ordering
 
 ORACLE_CONNECTION_STRING = os.environ.get('ORACLE_CONNECTION_STRING')
 ORACLE_SCHEMA = os.environ.get('ORACLE_SCHEMA')

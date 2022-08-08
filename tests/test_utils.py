@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from snax.utils import copy_to_temp, frames_equal_up_to_row_ordering
+from snax._utils import copy_to_temp, frames_equal_up_to_row_ordering
 
 dummy_directory_path = Path(__file__).parent / 'test_data' / 'dummy_directory'
 dummy_file_path = dummy_directory_path / 'dummy_file.txt'
