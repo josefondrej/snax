@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='snax',
-    version='0.0.2',
+    version='0.1.0',
     author='Josef Ondrej',
     author_email='josef.ondrej@outlook.com',
     description='The truly lightweight feature store',
