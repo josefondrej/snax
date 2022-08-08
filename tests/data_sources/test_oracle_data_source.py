@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 
 import snax.data_sources.examples.oracle
-from snax.utils import frames_equal_up_to_row_ordering
+from snax._utils import frames_equal_up_to_row_ordering
 
 
 @pytest.fixture

@@ -11,7 +11,7 @@ from snax.data_sources.examples import csv, in_memory, oracle
 from snax.data_sources.oracle_data_source import OracleDataSource
 from snax.entity import Entity
 from snax.feature import Feature
-from snax.utils import frames_equal_up_to_row_ordering
+from snax._utils import frames_equal_up_to_row_ordering
 from snax.value_type import Int, String, Bool, Timestamp
 
 _data_source_backend_to_examples_module = {

@@ -38,38 +38,41 @@ from snax.feature_view import FeatureView
 from snax.value_type import Int, String
 
 raw_data = pd.DataFrame({
-    'game_id': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    'season': ['2020', '2020', '2020', '2020', '2020', '2020', '2020', '2020', '2020', '2020'],
-    'home_goals': [5, 8, 3, 6, 4, 5, 2, 1, 0, 0],
-    'away_goals': [3, 2, 1, 0, 2, 1, 0, 0, 0, 0],
+    'game_id': [1, 2, 3, 4, 5, 6, 7, 8],
+    'home_goals': [5, 8, 3, 6, 4, 5, 2, 1],
+    'away_goals': [3, 2, 1, 0, 2, 1, 0, 0],
     'start_timestamp': [
         '2022-17-02T15:50:00', '2022-12-02T16:30:00', '2022-12-02T16:30:00', '2022-12-02T16:30:00',
         '2022-17-02T15:50:00', '2022-12-02T16:30:00', '2022-12-02T16:30:00', '2022-12-02T16:30:00',
-        '2022-17-02T15:50:00', '2022-12-02T16:30:00'
     ]
 })
 
 in_memory_games_data_source = InMemoryDataSource(name='games_in_memory', data=raw_data)
-match_entity = Entity(name='game', join_keys=['game_id'])
-nhl_games_csv_feature_view = FeatureView(
+game_entity = Entity(name='game', join_keys=['game_id'])
+games_feature_view = FeatureView(
     name='games_in_memory',
-    entities=[match_entity],
-    features=[Feature('game_id', Int), Feature('season', String), Feature('home_goals', Int),
-              Feature('away_goals', Int), Feature('start_timestamp', String)],
-    source=in_memory_games_data_source)
+    entities=[game_entity],
+    features=[
+        Feature('game_id', Int),
+        Feature('season', String),
+        Feature('home_goals', Int),
+        Feature('away_goals', Int),
+        Feature('start_timestamp', String)
+    ],
+    source=in_memory_games_data_source
+)
 ```
 
 2. Create python file called `main.py` and paste the following code inside it:
 
 ```python
 import pandas as pd
-
 from snax.feature_store import FeatureStore
 
 FEATURE_STORE_PATH = '/path/to/my/feature_repo'
 feature_store = FeatureStore(FEATURE_STORE_PATH)
 
-entity_dataframe = pd.DataFrame({'game_id': [7, 6, 5, 4, 2, 10]})
+entity_dataframe = pd.DataFrame({'game_id': [7, 6, 5, 4, 2]})
 entity_dataframe_with_values = feature_store.add_features_to_dataframe(
     dataframe=entity_dataframe,
     feature_names=[
@@ -77,7 +80,7 @@ entity_dataframe_with_values = feature_store.add_features_to_dataframe(
         'games_in_memory:away_goals',
         'games_in_memory:start_timestamp'
     ],
-    entity_name='game',
+    entity_name='game'
 )
 
 print(entity_dataframe_with_values)
@@ -93,7 +96,6 @@ print(entity_dataframe_with_values)
      5       4           2               2022-17-02T15:50:00
      4       6           0               2022-12-02T16:30:00
      2       8           2               2022-12-02T16:30:00
-    10       0           0               2022-12-02T16:30:00
     ```
 
 ## Basic Concepts

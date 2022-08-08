@@ -4,7 +4,7 @@ from snax.data_sources.csv_data_source import CsvDataSource
 from snax.example_feature_repos.sports_feature_repo.nhl_games import data_path as original_nhl_data_path
 from snax.example_feature_repos.users_with_nas_feature_repo.users_with_nas import \
     data_path as original_users_with_na_data_path
-from snax.utils import copy_to_temp
+from snax._utils import copy_to_temp
 
 
 def create_nhl_games() -> CsvDataSource:
