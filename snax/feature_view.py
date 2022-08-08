@@ -105,8 +105,8 @@ class FeatureView:
 
         feature_values = self.source.select(
             columns=[entity] + feature_names,
-            key=entity,
-            key_values=dataframe[entity_name.join_keys]
+            key=[entity],
+            key_values=dataframe[entity.join_keys]
         )
 
         feature_values = cast_to_feature_types(
@@ -114,5 +114,5 @@ class FeatureView:
             features=[self.get_feature(feature_name) for feature_name in feature_names]
         )
 
-        dataframe = dataframe.merge(feature_values, on=entity_name.join_keys, how='left')
+        dataframe = dataframe.merge(feature_values, on=entity.join_keys, how='left')
         return dataframe
