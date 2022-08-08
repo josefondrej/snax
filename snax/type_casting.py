@@ -11,7 +11,7 @@ from snax.value_type import ValueType, Null, TimestampList, BoolList, FloatList,
     Float, Int, String, Unknown
 
 
-def safe_cast(cast_fn):
+def _safe_cast(cast_fn):
     def safe_cast_fn(value, *args, **kwargs):
         if pd.isna(value):
             return None
@@ -23,27 +23,27 @@ def safe_cast(cast_fn):
     return safe_cast_fn
 
 
-@safe_cast
+@_safe_cast
 def _cast_unknown(value: Any) -> Any:
     return value
 
 
-@safe_cast
+@_safe_cast
 def _cast_string(value: Any) -> str:
     return str(value)
 
 
-@safe_cast
+@_safe_cast
 def _cast_int(value: Any) -> Union[float, int]:
     return int(float(value))
 
 
-@safe_cast
+@_safe_cast
 def _cast_float(value: Any) -> float:
     return float(value)
 
 
-@safe_cast
+@_safe_cast
 def _cast_bool(value: Any) -> bool:
     if isinstance(value, str):
         if value.lower() in ['true', 't', '1', '1.0']:
@@ -54,7 +54,7 @@ def _cast_bool(value: Any) -> bool:
     return bool(value)
 
 
-@safe_cast
+@_safe_cast
 def _cast_timestamp(value: Any, format_string: Optional[str] = None) -> datetime:
     if isinstance(value, str):
         return datetime.strptime(value, format_string)
@@ -68,37 +68,37 @@ def _strlist_to_list(value: str) -> List[str]:
     return json.loads(value)
 
 
-@safe_cast
+@_safe_cast
 def _cast_string_list(value: Any) -> List[str]:
     raw_values = _strlist_to_list(value)
     return [_cast_string(value) for value in raw_values]
 
 
-@safe_cast
+@_safe_cast
 def _cast_int_list(value: Any) -> List[Union[float, int]]:
     raw_values = _strlist_to_list(value)
     return [_cast_int(value) for value in raw_values]
 
 
-@safe_cast
+@_safe_cast
 def _cast_float_list(value: Any) -> List[float]:
     raw_values = _strlist_to_list(value)
     return [_cast_float(value) for value in raw_values]
 
 
-@safe_cast
+@_safe_cast
 def _cast_bool_list(value: Any) -> List[bool]:
     raw_values = _strlist_to_list(value)
     return [_cast_bool(value) for value in raw_values]
 
 
-@safe_cast
+@_safe_cast
 def _cast_timestamp_list(value: Any, format_string: str) -> List[datetime]:
     raw_values = _strlist_to_list(value)
     return [_cast_timestamp(value, format_string=format_string) for value in raw_values]
 
 
-@safe_cast
+@_safe_cast
 def _cast_null(value: Any) -> Any:
     return value
 
