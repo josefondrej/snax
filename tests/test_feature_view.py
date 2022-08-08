@@ -1,5 +1,4 @@
 from datetime import datetime
-from unittest import skip
 
 import pandas as pd
 import pytest
@@ -28,7 +27,6 @@ def feature_view_users_with_nas():
     )
 
 
-@skip('TODO: Implement the logic tested')
 def test_add_feature_to_dataframe_on_single_key_entity(feature_view_users_with_nas: FeatureView):
     entity_dataframe = pd.DataFrame({
         'id': [1, 2, 3],
@@ -42,9 +40,9 @@ def test_add_feature_to_dataframe_on_single_key_entity(feature_view_users_with_n
         'id': [1, 2, 3],
         'first_name': ['Cirillo', 'Codi', 'Marion'],
         'timestamp': [
-            datetime(2020, 9, 4, 10, 41, 25),
-            datetime(2020, 12, 24, 15, 17, 57),
-            datetime(2020, 12, 9, 2, 56, 18)
+            datetime(2021, 9, 4, 10, 41, 25),
+            datetime(2021, 12, 24, 15, 17, 57),
+            datetime(2021, 12, 9, 2, 56, 18)
         ],
         'is_subscribed': [True, True, False],
         'age': [45.8, 4.9, None],
@@ -57,7 +55,6 @@ def test_add_feature_to_dataframe_on_single_key_entity(feature_view_users_with_n
     assert feature_values.equals(expected_feature_values)
 
 
-@skip('TODO: Implement the logic tested')
 def test_add_feature_to_dataframe_on_multi_key_entity(feature_view_users_with_nas: FeatureView):
     entity_dataframe = pd.DataFrame({
         'id': [2, 3, 5],
