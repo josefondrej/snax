@@ -16,12 +16,15 @@ def test_copy_file():
 
 
 def test_copy_empty_dir():
-    gitkeep_file_path = empty_dummy_directory_path / '.gitkeep'
-    if os.path.exists(gitkeep_file_path):
-        os.remove(gitkeep_file_path)
+    # Prepare empty directory in temporary location
+    empty_directory_temp_path = copy_to_temp(empty_dummy_directory_path)
+    temp_gitkeep_file_path = empty_directory_temp_path / '.gitkeep'
+    if os.path.exists(temp_gitkeep_file_path):
+        os.remove(temp_gitkeep_file_path)
 
-    temp_path = copy_to_temp(empty_dummy_directory_path)
-    assert os.path.exists(temp_path)
+    # Copy the empty directory to yet another temporary location
+    empty_directory_temp_path_2 = copy_to_temp(empty_dummy_directory_path)
+    assert os.path.exists(empty_directory_temp_path_2)
 
 
 def test_copy_non_empty_dir():
