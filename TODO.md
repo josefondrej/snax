@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] Implement `FeatureStore.add_features_to_dataframe`
 - [ ] Add option to keep full feature names (`view:feature`) in `add_features_to_dataframe`
 - [ ] Handle reserved column names in oracle data source
 - [ ] Unify the query language in `DataSource` so it does not depend on the type of the `DataSource`
@@ -9,6 +8,7 @@
 - [ ] Support richer string timestamp formats when converting to `Timestamp`
 - [ ] Support richer None/NaN formats in list ValueTypes casting from string
 
+- [x] Implement `FeatureStore.add_features_to_dataframe`
 - [x] Add select by key values option to data source `select(..., key_values: pd.DataFrame = None, ...)`
 - [x] Add few data source specific tests to test that at least some `where_sql_query` parameter values work
 - [x] Test for inserting new data into empty data source
