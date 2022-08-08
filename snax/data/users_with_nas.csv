@@ -1,0 +1,11 @@
+id,first_name,last_name,gender,timestamp,age,is_subscribed,children,string_id
+1,Cirillo,Downing,Male,2021-09-04T10:41:25,45.8,true,1,a
+2,Codi,Graeber,Female,2021-12-24T15:17:57,4.9,true,3,b
+3,Marion,"",Male,2021-12-09T02:56:18,"",false,4,c
+4,Germaine,Cudihy,"",2022-01-17T02:30:20,82.2,"","",d
+5,"",Ratcliffe,Female,2022-03-30T17:29:16,62.0,false,2,ef
+6,Melloney,Hurnell,Female,2022-07-11T07:14:50,56.4,true,2,g
+7,Madel,"",Female,2022-03-22T12:29:03,"","","",h
+8,"",Smy,Female,"",33.6,false,2,i
+9,Rockwell,Crumly,Male,2022-03-02T17:42:51,90.8,true,5,j
+10,Trumaine,Minkin,Male,2021-08-09T15:57:12,94.6,false,2,k

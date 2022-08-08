@@ -1,0 +1,101 @@
+game_id,season,type,date_time_GMT,away_team_id,home_team_id,away_goals,home_goals,outcome,home_rink_side_start,venue,venue_link,venue_time_zone_id,venue_time_zone_offset,venue_time_zone_tz
+2016020045,20162017,R,2016-10-19T00:30:00Z,4,16,4,7,home win REG,right,United Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2017020812,20172018,R,2018-02-07T00:00:00Z,24,7,4,3,away win OT,left,KeyBank Center,/api/v1/venues/null,America/New_York,-4,EDT
+2015020314,20152016,R,2015-11-24T01:00:00Z,21,52,4,1,away win REG,right,MTS Centre,/api/v1/venues/null,America/Winnipeg,-5,CDT
+2015020849,20152016,R,2016-02-17T00:00:00Z,52,12,1,2,home win REG,right,PNC Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2017020586,20172018,R,2017-12-30T03:00:00Z,20,24,1,2,home win REG,left,Honda Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2016020610,20162017,R,2017-01-10T00:30:00Z,15,8,4,1,away win REG,right,Centre Bell,/api/v1/venues/null,America/Montreal,-4,EDT
+2015020606,20152016,R,2016-01-08T03:30:00Z,10,26,1,2,home win REG,right,STAPLES Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017020240,20172018,R,2017-11-10T03:00:00Z,23,24,1,4,home win REG,left,Honda Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017020624,20172018,R,2018-01-05T02:00:00Z,29,21,0,2,home win REG,right,Pepsi Center,/api/v1/venues/null,America/Denver,-6,MDT
+2015020346,20152016,R,2015-11-29T00:00:00Z,22,5,3,2,away win OT,left,CONSOL Energy Center,/api/v1/venues/null,America/New_York,-4,EDT
+2017020221,20172018,R,2017-11-07T01:30:00Z,52,25,4,1,away win REG,right,American Airlines Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2016020298,20162017,R,2016-11-24T03:30:00Z,2,26,2,4,home win REG,right,STAPLES Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017020731,20172018,R,2018-01-23T02:00:00Z,2,53,2,3,home win OT,left,Gila River Arena,/api/v1/venues/null,America/Phoenix,-7,MST
+2016020205,20162017,R,2016-11-11T02:00:00Z,52,53,3,2,away win REG,left,Gila River Arena,/api/v1/venues/null,America/Phoenix,-7,MST
+2016020246,20162017,R,2016-11-18T00:00:00Z,52,4,2,5,home win REG,right,Wells Fargo Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020107,20162017,R,2016-10-28T23:30:00Z,16,1,3,2,away win OT,left,Prudential Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016021020,20162017,R,2017-03-14T01:00:00Z,5,20,3,4,home win OT,right,Scotiabank Saddledome,/api/v1/venues/null,America/Denver,-6,MDT
+2017020986,20172018,R,2018-03-02T01:30:00Z,14,25,5,4,away win OT,right,American Airlines Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2017021124,20172018,R,2018-03-20T23:00:00Z,22,12,7,3,away win REG,right,PNC Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015020981,20152016,R,2016-03-06T22:00:00Z,5,1,6,1,away win REG,left,Prudential Center,/api/v1/venues/null,America/New_York,-4,EDT
+2017020146,20172018,R,2017-10-27T00:00:00Z,2,30,4,6,home win REG,right,Xcel Energy Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2016020716,20162017,R,2017-01-25T00:00:00Z,29,2,2,4,home win REG,left,Barclays Center,/api/v1/venues/null,America/New_York,-4,EDT
+2017020001,20172018,R,2017-10-04T23:00:00Z,10,52,7,2,away win REG,right,Bell MTS Place,/api/v1/venues/null,America/Winnipeg,-5,CDT
+2016020933,20162017,R,2017-03-01T03:30:00Z,10,28,1,3,home win REG,left,SAP Center at San Jose,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2015021066,20152016,R,2016-03-19T02:00:00Z,6,24,0,4,home win REG,left,Honda Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2015020086,20152016,R,2015-10-21T00:00:00Z,14,18,4,5,home win OT,left,Bridgestone Arena,/api/v1/venues/null,America/Chicago,-5,CDT
+2017020482,20172018,R,2017-12-15T00:30:00Z,1,8,1,2,home win OT,right,Centre Bell,/api/v1/venues/null,America/Montreal,-4,EDT
+2016021163,20162017,R,2017-04-01T23:00:00Z,9,52,2,4,home win REG,right,MTS Centre,/api/v1/venues/null,America/Winnipeg,-5,CDT
+2015020687,20152016,R,2016-01-20T00:30:00Z,22,14,4,6,home win REG,left,Amalie Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2017020706,20172018,R,2018-01-20T00:30:00Z,8,15,3,2,away win REG,right,Capital One Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015020619,20152016,R,2016-01-10T00:00:00Z,10,28,0,7,home win REG,left,SAP Center at San Jose,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017021076,20172018,R,2018-03-14T01:00:00Z,22,20,0,1,home win REG,right,Scotiabank Saddledome,/api/v1/venues/null,America/Denver,-6,MDT
+2015020562,20152016,R,2016-01-01T02:00:00Z,26,20,4,1,away win REG,right,Scotiabank Saddledome,/api/v1/venues/null,America/Denver,-6,MDT
+2016020264,20162017,R,2016-11-20T00:00:00Z,10,8,1,2,home win REG,right,Centre Bell,/api/v1/venues/null,America/Montreal,-4,EDT
+2017021046,20172018,R,2018-03-10T01:30:00Z,24,25,1,2,home win REG,right,American Airlines Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2015020201,20152016,R,2015-11-07T21:00:00Z,13,26,1,4,home win REG,right,STAPLES Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2015020079,20152016,R,2015-10-19T02:00:00Z,21,26,1,2,home win REG,right,STAPLES Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017020214,20172018,R,2017-11-05T23:00:00Z,21,2,4,6,home win REG,left,Barclays Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020683,20162017,R,2017-01-20T03:00:00Z,21,24,1,2,home win REG,left,Honda Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017020285,20172018,R,2017-11-17T02:00:00Z,15,21,2,6,home win REG,right,Pepsi Center,/api/v1/venues/null,America/Denver,-6,MDT
+2017020423,20172018,R,2017-12-06T03:00:00Z,12,23,0,3,home win REG,right,Rogers Arena,/api/v1/venues/null,America/Vancouver,-7,PDT
+2015020516,20152016,R,2015-12-23T03:30:00Z,28,26,5,3,away win REG,right,STAPLES Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017020930,20172018,R,2018-02-23T00:00:00Z,2,10,3,4,home win OT,right,Air Canada Centre,/api/v1/venues/null,America/Toronto,-4,EDT
+2017020301,20172018,R,2017-11-19T00:30:00Z,30,15,1,3,home win REG,right,Capital One Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015021029,20152016,R,2016-03-13T03:30:00Z,15,28,2,5,home win REG,left,SAP Center at San Jose,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2016020884,20162017,R,2017-02-22T00:00:00Z,5,12,3,1,away win REG,right,PNC Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2017021066,20172018,R,2018-03-12T23:00:00Z,8,29,2,5,home win REG,left,Nationwide Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2016020906,20162017,R,2017-02-25T22:00:00Z,15,18,2,5,home win REG,left,Bridgestone Arena,/api/v1/venues/null,America/Chicago,-5,CDT
+2017021087,20172018,R,2018-03-15T23:30:00Z,6,13,0,3,home win REG,right,BB&T Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020885,20162017,R,2017-02-22T00:30:00Z,52,10,4,5,home win OT,right,Air Canada Centre,/api/v1/venues/null,America/Toronto,-4,EDT
+2016020560,20162017,R,2017-01-02T00:30:00Z,9,15,1,2,home win REG,right,Verizon Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020986,20162017,R,2017-03-10T00:30:00Z,4,10,2,4,home win REG,right,Air Canada Centre,/api/v1/venues/null,America/Toronto,-4,EDT
+2015020906,20152016,R,2016-02-26T00:00:00Z,30,4,2,3,home win REG,right,Wells Fargo Center,/api/v1/venues/null,America/New_York,-4,EDT
+2017020625,20172018,R,2018-01-05T02:00:00Z,26,20,3,4,home win REG,right,Scotiabank Saddledome,/api/v1/venues/null,America/Denver,-6,MDT
+2015020646,20152016,R,2016-01-15T00:00:00Z,3,2,1,3,home win REG,left,Barclays Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020119,20162017,R,2016-10-30T00:00:00Z,25,30,0,4,home win REG,right,Xcel Energy Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2016020070,20162017,R,2016-10-22T23:00:00Z,12,4,3,6,home win REG,right,Wells Fargo Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020348,20162017,R,2016-12-02T00:00:00Z,2,15,3,0,away win REG,right,Verizon Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016021004,20162017,R,2017-03-12T00:00:00Z,10,12,3,2,away win OT,right,PNC Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015020540,20152016,R,2015-12-29T03:30:00Z,21,28,6,3,away win REG,left,SAP Center at San Jose,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2016020674,20162017,R,2017-01-19T01:00:00Z,6,17,5,6,home win OT,right,Joe Louis Arena,/api/v1/venues/null,America/Detroit,-4,EDT
+2017020138,20172018,R,2017-10-26T23:00:00Z,28,6,1,2,home win REG,left,TD Garden,/api/v1/venues/null,America/New_York,-4,EDT
+2016020602,20162017,R,2017-01-08T03:30:00Z,17,28,3,6,home win REG,left,SAP Center at San Jose,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017020020,20172018,R,2017-10-07T23:00:00Z,7,2,3,6,home win REG,left,Barclays Center,/api/v1/venues/null,America/New_York,-4,EDT
+2015020227,20152016,R,2015-11-11T03:30:00Z,2,28,4,2,away win REG,left,SAP Center at San Jose,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2015020453,20152016,R,2015-12-16T00:00:00Z,1,7,2,0,away win REG,left,First Niagara Center,/api/v1/venues/null,America/New_York,-4,EDT
+2017021170,20172018,R,2018-03-26T23:30:00Z,15,3,4,2,away win REG,right,Madison Square Garden,/api/v1/venues/null,America/New_York,-4,EDT
+2017021025,20172018,R,2018-03-07T01:00:00Z,25,18,0,2,home win REG,left,Bridgestone Arena,/api/v1/venues/null,America/Chicago,-5,CDT
+2016020531,20162017,R,2016-12-29T03:00:00Z,26,23,1,2,home win REG,right,Rogers Arena,/api/v1/venues/null,America/Vancouver,-7,PDT
+2017020540,20172018,R,2017-12-23T00:30:00Z,30,13,2,4,home win REG,right,BB&T Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020438,20162017,R,2016-12-14T01:00:00Z,13,30,1,5,home win REG,right,Xcel Energy Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2016020435,20162017,R,2016-12-14T00:30:00Z,28,10,3,2,away win OT,right,Air Canada Centre,/api/v1/venues/null,America/Toronto,-4,EDT
+2015021111,20152016,R,2016-03-25T02:30:00Z,22,28,6,3,away win REG,left,SAP Center at San Jose,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2016020099,20162017,R,2016-10-27T23:00:00Z,53,4,5,4,away win REG,right,Wells Fargo Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020283,20162017,R,2016-11-23T00:00:00Z,19,6,4,2,away win REG,left,TD Garden,/api/v1/venues/null,America/New_York,-4,EDT
+2017020699,20172018,R,2018-01-19T00:00:00Z,25,29,1,2,home win OT,left,Nationwide Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015020239,20152016,R,2015-11-13T01:30:00Z,52,25,3,6,home win REG,right,American Airlines Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2017020506,20172018,R,2017-12-17T03:00:00Z,18,20,2,0,away win REG,right,Scotiabank Saddledome,/api/v1/venues/null,America/Denver,-6,MDT
+2017021194,20172018,R,2018-03-30T00:00:00Z,28,18,3,5,home win REG,left,Bridgestone Arena,/api/v1/venues/null,America/Chicago,-5,CDT
+2017020342,20172018,R,2017-11-25T00:00:00Z,9,29,2,5,home win REG,left,Nationwide Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2017021257,20172018,R,2018-04-07T19:00:00Z,3,4,0,5,home win REG,right,Wells Fargo Center,/api/v1/venues/null,America/New_York,-4,EDT
+2015020007,20152016,R,2015-10-08T23:30:00Z,4,14,2,3,home win OT,left,Amalie Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015020693,20152016,R,2016-01-22T00:00:00Z,23,6,4,2,away win REG,left,TD Garden,/api/v1/venues/null,America/New_York,-4,EDT
+2016020368,20162017,R,2016-12-04T01:00:00Z,29,53,3,2,away win OT,left,Gila River Arena,/api/v1/venues/null,America/Phoenix,-7,MST
+2017021255,20172018,R,2018-04-07T00:30:00Z,19,16,4,1,away win REG,right,United Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2015020061,20152016,R,2015-10-17T00:00:00Z,20,52,1,3,home win REG,right,MTS Centre,/api/v1/venues/null,America/Winnipeg,-5,CDT
+2015020871,20152016,R,2016-02-20T00:00:00Z,7,29,4,0,away win REG,left,Nationwide Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015021099,20152016,R,2016-03-23T23:00:00Z,9,2,1,3,home win REG,left,Barclays Center,/api/v1/venues/null,America/New_York,-4,EDT
+2015020971,20152016,R,2016-03-05T20:00:00Z,18,21,5,2,away win REG,right,Pepsi Center,/api/v1/venues/null,America/Denver,-6,MDT
+2017021010,20172018,R,2018-03-04T21:00:00Z,16,24,3,6,home win REG,left,Honda Center,/api/v1/venues/null,America/Los_Angeles,-7,PDT
+2017020853,20172018,R,2018-02-11T17:00:00Z,5,19,4,1,away win REG,left,Scottrade Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2016020887,20162017,R,2017-02-22T00:30:00Z,22,14,1,4,home win REG,left,Amalie Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015020165,20152016,R,2015-11-01T22:00:00Z,14,12,4,3,away win REG,right,PNC Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2017020696,20172018,R,2018-01-19T00:00:00Z,6,2,5,2,away win REG,left,Barclays Center,/api/v1/venues/null,America/New_York,-4,EDT
+2016020759,20162017,R,2017-02-03T00:00:00Z,8,4,1,3,home win REG,right,Wells Fargo Center,/api/v1/venues/null,America/New_York,-4,EDT
+2017020164,20172018,R,2017-10-29T00:00:00Z,5,30,1,2,home win REG,right,Xcel Energy Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2016020889,20162017,R,2017-02-22T01:00:00Z,16,30,5,3,away win REG,right,Xcel Energy Center,/api/v1/venues/null,America/Chicago,-5,CDT
+2017020059,20172018,R,2017-10-13T23:00:00Z,3,29,1,3,home win REG,left,Nationwide Arena,/api/v1/venues/null,America/New_York,-4,EDT
+2015020528,20152016,R,2015-12-27T23:00:00Z,10,2,3,1,away win REG,left,Barclays Center,/api/v1/venues/null,America/New_York,-4,EDT
+2017020953,20172018,R,2018-02-25T00:00:00Z,7,15,1,5,home win REG,right,Capital One Arena,/api/v1/venues/null,America/New_York,-4,EDT
