@@ -1,5 +1,4 @@
 from pathlib import Path
-from unittest import skip
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
@@ -19,7 +18,6 @@ def test_initialize():
     assert feature_view_names == ['nhl_games_csv']
 
 
-@skip('TODO: FeatureStore.add_features_to_dataframe not implemented yet')
 def test_add_features_to_dataframe():
     sports_feature_repo_path = Path(sports_feature_repo.__file__).parent
     feature_store = FeatureStore(repo_path=sports_feature_repo_path)
@@ -40,7 +38,8 @@ def test_add_features_to_dataframe():
         feature_names=[
             'nhl_games_csv:outcome',
             'nhl_games_csv:venue'
-        ]
+        ],
+        entity_name='game',
     )
 
     expected_feature_dataframe = pd.DataFrame({
@@ -48,5 +47,8 @@ def test_add_features_to_dataframe():
         'outcome': {22: 'away win REG', 40: 'home win REG'},
         'venue': {22: 'Bell MTS Place', 40: 'Rogers Arena'}
     })
+
+    feature_dataframe.reset_index(inplace=True, drop=True)
+    expected_feature_dataframe.reset_index(inplace=True, drop=True)
 
     assert_frame_equal(feature_dataframe, expected_feature_dataframe)
